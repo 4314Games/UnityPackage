@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI Package", "AI Package.csproj", "{8710EABB-EF2F-338E-86E3-43E1712E8111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI Package.Editor", "AI Package.Editor.csproj", "{709859F8-00B9-D36F-59FD-A996DE92874C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8710EABB-EF2F-338E-86E3-43E1712E8111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8710EABB-EF2F-338E-86E3-43E1712E8111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8710EABB-EF2F-338E-86E3-43E1712E8111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8710EABB-EF2F-338E-86E3-43E1712E8111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{709859F8-00B9-D36F-59FD-A996DE92874C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{709859F8-00B9-D36F-59FD-A996DE92874C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{709859F8-00B9-D36F-59FD-A996DE92874C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{709859F8-00B9-D36F-59FD-A996DE92874C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
