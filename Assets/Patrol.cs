@@ -3,37 +3,50 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AISystem : MonoBehaviour {
+public class Patrol : MonoBehaviour {
     public GameObject objectToAffect;
     public List<GameObject> nodes;
 
     private NavMeshAgent agent;
     public bool toPatrol = false;
     private bool isPatrolling = false;
-    private int nodeAt = 0;
+    [SerializeField]private int nodeAt = 0;
     public bool gotoStart = false;
     private bool reachedEnd = false;
     // Use this for initialization
-    void Start () {
-
-        agent = GetComponent<NavMeshAgent>();
+    void Start()
+    {
+        agent = objectToAffect.GetComponent<NavMeshAgent>();
+        if (objectToAffect == null)
+        {
+            Debug.Log("There is no object to Affect...");
+        }
+        if (nodes.Count == 0)
+        {
+            Debug.Log("There are no nodes to move to...");
+        }
+        if (nodes.Count == 1)
+        {
+            nodes.Add(this.gameObject);
+        }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         if (toPatrol)
         {
             if (agent.remainingDistance < 0.5f)
             {
-                Patrol();
+                PatrolTo();
             }
         }
-	}
-    public void Patrol()
+    }
+    public void PatrolTo()
     {
-       
-        if (nodeAt > nodes.Capacity - 1)
-        { 
+
+        if (nodeAt > nodes.Count - 1)
+        {
             reachedEnd = true;
             if (gotoStart)
             {
@@ -41,7 +54,7 @@ public class AISystem : MonoBehaviour {
             }
             else
             {
-                nodeAt = nodes.Capacity - 1;
+                nodeAt = nodes.Count - 1;
             }
             //or go bac kthrough;
         }
@@ -77,18 +90,6 @@ public class AISystem : MonoBehaviour {
             isPatrolling = false;
 
         }
-
-    }
-    public void Wander()
-    {
-
-    }
-    public void Seek()
-    {
-
-    }
-    public void Flee()
-    {
 
     }
 }
