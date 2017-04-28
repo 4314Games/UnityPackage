@@ -36,8 +36,7 @@ public class Node : MonoBehaviour {
         //If linking enabled, node isnt already connected and it isnt the linking node, add this node.
         if(pathingScript.isLinking && !pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject) && pathingScript.nodeLinking != gameObject)
         {
-            pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Add(gameObject);
-            Debug.Log("Nodes Linked", pathingScript.nodeLinking.gameObject);                        
+            pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Add(gameObject);                       
         }
         else if(pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject))
         {

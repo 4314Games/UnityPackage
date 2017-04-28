@@ -39,7 +39,7 @@ public class Pathing : MonoBehaviour {
 
     public void AddNode()
     {
-        //Do IT HERE.
+
     }
 
     public void SpawnNode(Vector3 p_pos)
