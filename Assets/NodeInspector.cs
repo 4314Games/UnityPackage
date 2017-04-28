@@ -6,25 +6,25 @@ using UnityEditor;
 
 [CustomEditor(typeof(Node))]
 public class NodeInspector : Editor {
-    bool first;
+   // bool first;
 	void OnSceneGUI()
     {
-        if (!first)
-        {
+        //if (!first)
+        //{
             Node myScript = (Node)target;
-            //if (Event.current.type == EventType.MouseDown)  //Double click connects node.
-          //  {
+            if (Event.current.type == EventType.MouseDown)  //Double click connects node.
+            {
 
                 //Debug.Log("Time:" + EditorApplication.timeSinceStartup + " | Current Node:", myScript.pathingScript.nodeLinking.gameObject);
                 myScript.StartConnectingNode();
-            //Event.current.Use();
-            // }
-            first = true;
-        }
-        //else if (Event.current.type == EventType.MouseMove)
-        //{
-        //    if (myScript.pathingScript.isLinking) Selection.activeGameObject = myScript.pathingScript.nodeLinking;
-        //}        
+           // Event.current.Use();
+             }
+            //first = true;
+       // }
+        else if (Event.current.type == EventType.MouseMove)
+        {
+            if (myScript.pathingScript.isLinking) Selection.activeGameObject = myScript.pathingScript.nodeLinking;
+        }        
     }    
 
     public override void OnInspectorGUI()
