@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AStarPathFinding.cs" />
     <Compile Include="Assets\Node.cs" />
     <Compile Include="Assets\NodeInspector.cs" />
     <Compile Include="Assets\Pathing.cs" />

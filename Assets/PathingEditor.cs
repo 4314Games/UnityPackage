@@ -11,7 +11,6 @@ public class PathingEditor : Editor {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-
         Pathing myScript = (Pathing)target;
         if(myScript.spawningNodes)      //Toggle spawning nodes on/off
         {
@@ -26,10 +25,10 @@ public class PathingEditor : Editor {
             {
                 myScript.spawningNodes = true;
             }
-        }          
+        }
+       
 
-
-        
+       
     }
 
     
@@ -46,16 +45,7 @@ public class PathingEditor : Editor {
         Pathing myScript = (Pathing)target;
         if (Event.current.type == EventType.MouseDown)
         {
-            if (myScript.spawningNodes)
-            {
-                //ActiveEditorTracker.sharedTracker.isLocked = true;
-                Selection.activeGameObject = myScript.gameObject;
-                PrepareNodeSpawn();
-                Selection.activeGameObject = myScript.gameObject;
-            }
-            //else ActiveEditorTracker.sharedTracker.isLocked = false;
-
-
+            if (myScript.spawningNodes)  PrepareNodeSpawn();
         }
         if (myScript.spawningNodes) Selection.activeGameObject = myScript.gameObject;
     }
@@ -72,7 +62,13 @@ public class PathingEditor : Editor {
         Ray ray = p_ray;
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 100))
+        {
             Debug.DrawLine(ray.origin, hit.point);
+            Pathing myScript = (Pathing)target;
+            myScript.PrintStuff(hit.collider.name);
+        }
+            
+        
         return hit.point;
     }
 

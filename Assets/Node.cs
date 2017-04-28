@@ -1,49 +1,63 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEditor;
+
 
 [ExecuteInEditMode]
 public class Node : MonoBehaviour {
 
     public Pathing pathingScript;
-    int id;
-    Vector3 position;
+    public int id;
     public List<GameObject> connectedNodes = new List<GameObject>();
+    public bool isLinking;
+    //PathFinding
+    public int gCost;
+    public int hCost;
+    public GameObject parent;
+
+   
 
     void Start()
     {
         pathingScript = GameObject.Find("AI/Pathing Prefab").GetComponent<Pathing>();
     }
 
-    public void Construct(int p_id, Vector3 p_position) //Constructs Node
+    public void Construct(int p_id) //Constructs Node
     {
         id = p_id;
-        position = p_position;
-    }
+        gameObject.name = "Node" + id;
+    }  
 
-    public void AddConnectedNode(GameObject p_node) //Adds node to this node
+    public void StartConnectingNode()   //Allows node to be connect to this node
     {
-        if (!connectedNodes.Contains(p_node))
+        Debug.Log("Wah");
+        //If linking enabled, node isnt already connected and it isnt the linking node, add this node.
+        if(pathingScript.isLinking && !pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject) && pathingScript.nodeLinking != gameObject)
         {
-            connectedNodes.Add(p_node);
-            print("Nodes Linked");
+            pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Add(gameObject);
+            Debug.Log("Nodes Linked", pathingScript.nodeLinking.gameObject);                        
         }
-        else print("Nodes Already Linked");
-    }
-
-    public void StartConnectingNode()   //Allws node to be connect to this node
-    {
-        pathingScript.LinkNodes(id);
+        else if(pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject))
+        {
+            print("Node Already Linked");
+        }
+        else if(pathingScript.nodeLinking != gameObject)
+        {
+            print("Cant Link This Node");
+        }
     }
 
     public int GetId() { return id; }   //Returns node ID
 
     void OnDestroy()    //Destroy node and clear from city
     {
+        if (isLinking) pathingScript.isLinking = false;
         pathingScript.RemoveNode(gameObject);
     }
 
-    void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         for (int x = 0; x < connectedNodes.Count; x++)  //Draw connections between nodes
         {
@@ -56,6 +70,7 @@ public class Node : MonoBehaviour {
             Gizmos.color = Color.white;
             Gizmos.DrawSphere((transform.position - (dir.normalized * (dir.magnitude / 2))), scaleFactorSphere);
         }
+        Gizmos.DrawIcon(transform.position, "dick");
     }
 
     public void RemoveConnectedNode(GameObject p_node)  //Remove deleted Node
@@ -63,4 +78,38 @@ public class Node : MonoBehaviour {
         if(connectedNodes.Contains(p_node)) connectedNodes.Remove(p_node);
     }
 
+    public void LinkerOn()
+    {
+        pathingScript.isLinking = true;
+        pathingScript.nodeLinking = gameObject;
+        //gameObject.
+        //TODO : CHANGE ICON
+    }
+
+    public void LinkerOff()
+    {
+        pathingScript.isLinking = false;
+        //TODO: CHANGE ICON
+    }
+
+    public bool GetPathLinking ()   //Gets Pathing sscript is linking
+    {
+        return pathingScript.isLinking;
+    }
+
+    public void PrintStuff(string p_print)
+    {
+        print(p_print);
+    }   //Print Stuff
+
+    public int fCost
+    {
+        get
+        {
+            return gCost + hCost;
+        }
+    }       //Pathfinding Cost
+
+    
+   
 }
