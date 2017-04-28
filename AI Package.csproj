@@ -81,6 +81,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\AISystem.cs" />
+    <Compile Include="Assets\AISystemEditor.cs" />
     <Compile Include="Assets\AStarPathFinding.cs" />
     <Compile Include="Assets\Node.cs" />
     <Compile Include="Assets\NodeInspector.cs" />
