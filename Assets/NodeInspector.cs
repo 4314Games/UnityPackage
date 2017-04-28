@@ -6,26 +6,26 @@ using UnityEditor;
 
 [CustomEditor(typeof(Node))]
 public class NodeInspector : Editor {
-    //bool first;
+   // bool first;
 	void OnSceneGUI()
     {
         //if (!first)
         //{
             Node myScript = (Node)target;
-        if (Event.current.type == EventType.MouseDown)  //Double click connects node.
-        {
+            if (Event.current.type == EventType.MouseDown)  //Double click connects node.
+            {
 
-            Debug.Log("Time:" + EditorApplication.timeSinceStartup + " | Current Node:", myScript.pathingScript.nodeLinking.gameObject);
-            myScript.StartConnectingNode();
-            //Event.current.Use();
-        }
-        //    first = true;
-        //}
+                //Debug.Log("Time:" + EditorApplication.timeSinceStartup + " | Current Node:", myScript.pathingScript.nodeLinking.gameObject);
+                myScript.StartConnectingNode();
+           // Event.current.Use();
+             }
+            //first = true;
+       // }
         else if (Event.current.type == EventType.MouseMove)
         {
             if (myScript.pathingScript.isLinking) Selection.activeGameObject = myScript.pathingScript.nodeLinking;
-        }
-    }
+        }        
+    }    
 
     public override void OnInspectorGUI()
     {
@@ -52,22 +52,5 @@ public class NodeInspector : Editor {
                 }
             }
         }
-
-        for(int x = 0; x < myScript.connectedNodes.Count; x++)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.TextField(myScript.connectedNodes[x].name, GUILayout.Width(100));
-            if (GUILayout.Button("X")) UnconnectNode(myScript.connectedNodes[x]);
-            GUILayout.EndHorizontal();
-        }
-
-        
-    }
-
-    void UnconnectNode(GameObject p_node)
-    {
-        Node myScript = (Node)target;
-        myScript.RemoveConnectedNode(p_node);
-        SceneView.RepaintAll();
     }
 }
