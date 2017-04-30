@@ -7,66 +7,101 @@ using UnityEditor;
 
 public class AIManagerEditor : Editor {
 
+    string seekButtonString = "Add Seek Component";
+    string seekButtonAddString = "Add Seek Component";
+    string seekButtonRemoveString = "Remove Seek Component";
+
+    string wanderButtonString = "Add Wander Component";
+    string wanderButtonAddString = "Add Wander Component";
+    string wanderButtonRemoveString = "Remove Wander Component";
+
+    string patrolButtonString = "Add Patrol Component";
+    string patrolButtonAddString = "Add Patrol Component";
+    string patrolButtonRemoveString = "Remove Patrol Component";
+
+    string fleeButtonString = "Add Flee Component";
+    string fleeButtonAddString = "Add Flee Component";
+    string fleeButtonRemoveString = "Remove Flee Component";
 
     public override void OnInspectorGUI()
     {
         AIManager script = (AIManager)target;
+      
         script.UpdateAIFunction();
-        DrawDefaultInspector();
-        if (GUILayout.Button("Edit Seek Settings"))
+        DrawDefaultInspector(); 
+
+        if (script.seekAdded)
+                seekButtonString = seekButtonRemoveString;
+        else if (!script.seekAdded)
+            seekButtonString = seekButtonAddString;
+
+        if (script.wanderAdded)
+            wanderButtonString = wanderButtonRemoveString;
+        else if (!script.wanderAdded)
+            wanderButtonString = wanderButtonAddString;
+
+        if (script.patrolAdded)
+            patrolButtonString = patrolButtonRemoveString;
+        else if (!script.patrolAdded)
+            patrolButtonString = patrolButtonAddString;
+
+        if (script.fleeAdded)
+            fleeButtonString = fleeButtonRemoveString;
+        else if (!script.fleeAdded)
+            fleeButtonString = fleeButtonAddString;
+
+        if (GUILayout.Button(seekButtonString))
         {
-            //close all other dropdowns
-            //Open dropdown menu to edit seek settings
-            foreach (Component item in script.gameObject.GetComponents<Component>())
+            if (script.seekAdded)
             {
-
-                if (item.GetType() == typeof(Seek))
-                {
-                    DestroyImmediate(item);
-                }
-              
-
+                DestroyImmediate(script.gameObject.GetComponent<Seek>());
+                script.seekAdded = false;
             }
-            script.gameObject.AddComponent<Seek>();
-
-        }
-        if (GUILayout.Button("Edit Wander Settings"))
-        {
-            //close all other dropdowns
-            //Open dropdown menu to edit seek settings
-            foreach (Component item in script.gameObject.GetComponents<Component>())
+            else if (!script.seekAdded)
             {
-
-                if (item.GetType() == typeof(Wander))
-                {
-                    DestroyImmediate(item);
-                }
-              
-
+                script.gameObject.AddComponent<Seek>();
+                script.seekAdded = true;
             }
-            script.gameObject.AddComponent<Wander>();
-
+           
         }
-        if (GUILayout.Button("Edit Patrol Settings"))
+        if (GUILayout.Button(wanderButtonString))
         {
-            //close all other dropdowns
-            //Open dropdown menu to edit seek settings
-            foreach (Component item in script.gameObject.GetComponents<Component>())
+            if (script.wanderAdded)
             {
-
-                if (item.GetType() == typeof(Patrol))
-                {
-                    DestroyImmediate(item);
-                }
-
-
+                DestroyImmediate(script.gameObject.GetComponent<Wander>());
+                script.wanderAdded = false;
             }
-            script.gameObject.AddComponent<Patrol>();
+            else if (!script.wanderAdded)
+            {
+                script.gameObject.AddComponent<Wander>();
+                script.wanderAdded = true;
+            }
         }
-        if (GUILayout.Button("Edit Flee Settings"))
+        if (GUILayout.Button(patrolButtonString))
         {
-            //close all other dropdowns
-            //Open dropdown menu to edit seek settings
+            if (script.patrolAdded)
+            {
+                DestroyImmediate(script.gameObject.GetComponent<Patrol>());
+                script.patrolAdded = false;
+            }
+            else if (!script.patrolAdded)
+            {
+                script.gameObject.AddComponent<Patrol>();
+                script.patrolAdded = true;
+            }
+        }
+        if (GUILayout.Button(fleeButtonString))
+        {
+            if (script.fleeAdded)
+            {
+                DestroyImmediate(script.gameObject.GetComponent<Flee>());
+                script.fleeAdded = false;
+            }
+            else if (!script.fleeAdded)
+            {
+                script.gameObject.AddComponent<Flee>();
+                script.fleeAdded = true;
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ public class Patrol : MonoBehaviour {
     public List<GameObject> nodes;
 
     private NavMeshAgent agent;
-    public bool toPatrol = false;
+    [HideInInspector] public bool toPatrol = false;
     private bool isPatrolling = false;
     [SerializeField]private int nodeAt = 0;
     public bool gotoStart = false;

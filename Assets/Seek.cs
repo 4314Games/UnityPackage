@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Seek : MonoBehaviour {
     public GameObject objectToSeekTo;
-    public bool toSeek = false;
+    [HideInInspector] public bool toSeek = false;
 
     private NavMeshAgent agent;
 	// Use this for initialization

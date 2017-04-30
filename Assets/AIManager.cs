@@ -6,8 +6,11 @@ public class AIManager : MonoBehaviour {
     public bool toSeek = false;
     public bool toPatrol = false;
     public bool toFlee = false;
+    [HideInInspector] public bool seekAdded = false;
+    [HideInInspector] public bool wanderAdded = false;
+    [HideInInspector] public bool patrolAdded = false;
+    [HideInInspector] public bool fleeAdded = false;
 
-    
     // Use this for initialization
     void Start () {
 		
@@ -20,27 +23,40 @@ public class AIManager : MonoBehaviour {
             toSeek = false;
             toPatrol = false;
             toFlee = false;
-            GetComponent<Wander>().toWander = true;
+            if (GetComponent<Wander>() != null)
+                GetComponent<Wander>().toWander = true;
         }
         if (toSeek)
         {
             toWander = false;
             toPatrol = false;
             toFlee = false;
-            GetComponent<Seek>().toSeek = true;
+            if (GetComponent<Seek>() != null)
+                GetComponent<Seek>().toSeek = true;
         }
         if (toPatrol)
         {
             toWander = false;
             toSeek = false;
             toFlee = false;
-            GetComponent<Patrol>().toPatrol = true;
+            if (GetComponent<Patrol>() != null)
+                GetComponent<Patrol>().toPatrol = true;
         }
         if (toFlee)
         {
             toWander = false;
             toSeek = false;
             toPatrol = false;
+            if (GetComponent<Flee>() != null)
+                GetComponent<Flee>().toFlee = true;
         }
-	}
+        if (GetComponent<Seek>() != null)
+            GetComponent<Seek>().toSeek = toSeek;
+        if (GetComponent<Patrol>() != null)
+            GetComponent<Patrol>().toPatrol = toPatrol;
+        if (GetComponent<Wander>() != null)
+            GetComponent<Wander>().toWander = toWander;
+        if (GetComponent<Flee>() != null)
+            GetComponent<Flee>().toFlee = toFlee;
+    }
 }

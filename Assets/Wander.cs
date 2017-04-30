@@ -7,7 +7,7 @@ public class Wander : MonoBehaviour {
     [SerializeField] private GameObject nodeMovingTo;
     public List<GameObject> nodes;
     public float distanceToNextWander = 0.5f;
-    public bool toWander = false;
+    [HideInInspector] public bool toWander = false;
     private NavMeshAgent agent;
 
 
