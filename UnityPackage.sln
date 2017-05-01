@@ -1,8 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+<<<<<<< HEAD
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityPackage.Plugins", "UnityPackage.Plugins.csproj", "{97103809-DAD2-24A8-71E0-3B6FE01365F0}"
 EndProject
+=======
+# Visual Studio 2017
+>>>>>>> master
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityPackage", "UnityPackage.csproj", "{E65A9975-BD0B-8369-B93C-1DB73846FE82}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityPackage.Editor.Plugins", "UnityPackage.Editor.Plugins.csproj", "{66A9674D-0746-C314-3AD5-2DD9A9DEF8BC}"
