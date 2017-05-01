@@ -92,6 +92,8 @@
   <ItemGroup>
     <Compile Include="Assets\AIManager\AIManager.cs" />
     <Compile Include="Assets\AIManager\AIManagerEditor.cs" />
+    <Compile Include="Assets\AIManager\AStar\AStarNode.cs" />
+    <Compile Include="Assets\AIManager\AStar\Grid.cs" />
     <Compile Include="Assets\AIManager\Detection.cs" />
     <Compile Include="Assets\AIManager\Flee.cs" />
     <Compile Include="Assets\AIManager\Node.cs" />
