@@ -21,5 +21,6 @@ public class Seek : MonoBehaviour {
         {
             agent.destination = objectToSeekTo.transform.position;
         }
+
 	}
 }

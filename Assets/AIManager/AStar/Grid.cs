@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Grid : MonoBehaviour {
-    public bool onlyDisplayPathGizmos;
+    public bool displayGridGizmos;
     public LayerMask unwalkableMask;
     public Vector2 gridWorldSize;
     public float nodeRadius;
@@ -12,7 +12,7 @@ public class Grid : MonoBehaviour {
 	float nodeDiameter;
 	int gridSizeX, gridSizeY;
 
-    void Start()
+    void Awake()
     {
 		nodeDiameter = nodeRadius * 2;
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
@@ -75,39 +75,17 @@ public class Grid : MonoBehaviour {
             return gridSizeX * gridSizeY;
         }
     }
-    public List<AStarNode> path;
     void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
-        if (onlyDisplayPathGizmos)
-        {
-            if (path != null)
-            {
-                foreach (AStarNode item in path)
-                {
-                    Gizmos.color = Color.black;
-                    Gizmos.DrawCube(item.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
-                }
-            }
-        }
-        else
-        {
-            if (grid != null)
+            if (grid != null && displayGridGizmos)
             {
                 foreach (AStarNode item in grid)
                 {
                     Gizmos.color = (item.walkable) ? Color.white : Color.red;
-                    if (path != null)
-                    {
-                        if (path.Contains(item))
-                        {
-                            Gizmos.color = Color.black;
-                        }
-                    }
                     Gizmos.DrawCube(item.worldPosition, Vector3.one * (nodeDiameter - 0.1f));
                 }
             }
-        }
 
     }
 }
