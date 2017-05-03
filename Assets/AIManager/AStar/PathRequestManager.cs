@@ -25,6 +25,7 @@ public class PathRequestManager : MonoBehaviour {
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();
     }
+
     void TryProcessNext()
     {
         if (!isProcessingPath && pathRequestQueue.Count > 0)
@@ -34,12 +35,14 @@ public class PathRequestManager : MonoBehaviour {
             pathFinding.StartFindPath(currentPathRequest.pathStart,currentPathRequest.pathEnd);
         }
     }
+
     public void FinishedProcessingPath(Vector3[] path, bool success)
     {
         currentPathRequest.callback(path, success);
         isProcessingPath = false;
         TryProcessNext();
     }
+
     struct PathRequest
     {
         public Vector3 pathStart;

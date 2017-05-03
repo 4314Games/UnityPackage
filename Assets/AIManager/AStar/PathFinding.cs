@@ -13,6 +13,7 @@ public class PathFinding : MonoBehaviour {
         grid = GetComponent<Grid>();
         requestManager = GetComponent<PathRequestManager>();
     }
+
     IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
     {
         Stopwatch sw = new Stopwatch();
@@ -92,6 +93,7 @@ public class PathFinding : MonoBehaviour {
 
         return waypoints;
     }
+
     Vector3[] SimplifyPath(List<AStarNode> path)
     {
         List<Vector3> waypoints = new List<Vector3>();
@@ -107,6 +109,7 @@ public class PathFinding : MonoBehaviour {
         }
         return waypoints.ToArray();
     }
+
     int GetDistance(AStarNode nodeA,AStarNode nodeB)
     {
         int distX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
@@ -118,8 +121,10 @@ public class PathFinding : MonoBehaviour {
         }
         return 14 * distX + 10 * (distY - distX);
     }
+
     public void StartFindPath(Vector3 startPos,Vector3 targetPos)
     {
         StartCoroutine(FindPath(startPos, targetPos));
     }
+
 }

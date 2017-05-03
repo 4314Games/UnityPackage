@@ -8,14 +8,14 @@ public class Unit : MonoBehaviour {
     float speed = 8;
     Vector3[] path;
     int targetIndex;
-
+   // public bool isPathing = true;
     private void Start()
     {
         PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
-        if (pathSuccessful)
+        if (pathSuccessful /*&& isPathing*/)
         {
             path = newPath;
             StopCoroutine("FollowPath");
@@ -41,6 +41,7 @@ public class Unit : MonoBehaviour {
             yield return null;
         }
     }
+
     public void OnDrawGizmos()
     {
         if (path != null)
