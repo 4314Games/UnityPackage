@@ -16,7 +16,8 @@ public class Node : MonoBehaviour {
     public int gCost;
     public int hCost;
     public GameObject parent;
-
+    public GameObject platformObject;
+    public bool isPlatform;
    
 
     void Start()
@@ -28,23 +29,42 @@ public class Node : MonoBehaviour {
     {
         id = p_id;
         gameObject.name = "Node" + id;
-    }  
+    }
+
+    void Update()
+    {
+        if (isPlatform)
+        {
+            transform.position =  new Vector3(platformObject.transform.position.x, platformObject.transform.position.y + pathingScript.heightOffGround, platformObject.transform.position.z);
+        }
+    }
 
     public void StartConnectingNode()   //Allows node to be connect to this node
     {
-        Debug.Log("Wah");
-        //If linking enabled, node isnt already connected and it isnt the linking node, add this node.
-        if(pathingScript.isLinking && !pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject) && pathingScript.nodeLinking != gameObject)
+        if (!pathingScript.is1stNode && pathingScript.isLinking)
         {
-            pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Add(gameObject);                       
+            pathingScript.nodeLinking = gameObject;
+            pathingScript.is1stNode = true;
+            return;
         }
-        else if(pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject))
+        else if(pathingScript.is1stNode && pathingScript.isLinking)
         {
-            print("Node Already Linked");
-        }
-        else if(pathingScript.nodeLinking != gameObject)
-        {
-            print("Cant Link This Node");
+            //If linking enabled, node isnt already connected and it isnt the linking node, add this node.
+            if (pathingScript.isLinking && !pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject) && pathingScript.nodeLinking != gameObject)
+            {
+                pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Add(gameObject);
+                Debug.Log("Nodes Linked");
+            }
+            else if (pathingScript.nodeLinking.GetComponent<Node>().connectedNodes.Contains(gameObject))
+            {
+                print("Node Already Linked");
+            }
+            else if (pathingScript.nodeLinking != gameObject && pathingScript.isLinking)
+            {
+                print("Cant Link This Node");
+            }
+            pathingScript.nodeLinking = pathingScript.tempNode;
+            pathingScript.is1stNode = false;
         }
     }
 
@@ -58,18 +78,20 @@ public class Node : MonoBehaviour {
 
     public void OnDrawGizmos()
     {
-        for (int x = 0; x < connectedNodes.Count; x++)  //Draw connections between nodes
+        if (connectedNodes.Count != 0)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, connectedNodes[x].transform.position);
-            Vector3 dir = transform.position - connectedNodes[x].transform.position;
-            float scaleFactorCube = 0.15f;
-            float scaleFactorSphere = 0.225f;
-            Gizmos.DrawCube((transform.position - (dir.normalized * ((dir.magnitude / 2) + scaleFactorSphere))), new Vector3(scaleFactorCube, scaleFactorCube, scaleFactorCube));
-            Gizmos.color = Color.white;
-            Gizmos.DrawSphere((transform.position - (dir.normalized * (dir.magnitude / 2))), scaleFactorSphere);
+            for (int x = 0; x < connectedNodes.Count; x++)  //Draw connections between nodes
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(transform.position, connectedNodes[x].transform.position);
+                Vector3 dir = transform.position - connectedNodes[x].transform.position;
+                float scaleFactorCube = 0.15f;
+                float scaleFactorSphere = 0.225f;
+                Gizmos.DrawCube((transform.position - (dir.normalized * ((dir.magnitude / 2) + scaleFactorSphere))), new Vector3(scaleFactorCube, scaleFactorCube, scaleFactorCube));
+                Gizmos.color = Color.white;
+                Gizmos.DrawSphere((transform.position - (dir.normalized * (dir.magnitude / 2))), scaleFactorSphere);
+            }
         }
-        Gizmos.DrawIcon(transform.position, "dick");
     }
 
     public void RemoveConnectedNode(GameObject p_node)  //Remove deleted Node
