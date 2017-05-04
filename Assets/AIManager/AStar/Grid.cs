@@ -21,6 +21,10 @@ public class Grid : MonoBehaviour {
 		CreateGrid ();
 
     }
+    void Update()
+    {
+        CreateGrid();
+    }
 	void CreateGrid()
 	{
 		grid = new AStarNode[gridSizeX, gridSizeY];

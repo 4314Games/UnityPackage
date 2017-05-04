@@ -5,13 +5,13 @@ using UnityEngine;
 public class Unit : MonoBehaviour {
 
     public Transform target;
-    float speed = 8;
+    public float speed = 8;
     Vector3[] path;
-    int targetIndex;
+    [HideInInspector]public int targetIndex;
    // public bool isPathing = true;
     private void Start()
     {
-        PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+        //PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
@@ -25,20 +25,23 @@ public class Unit : MonoBehaviour {
 
     IEnumerator FollowPath()
     {
-        Vector3 currrentWaypoint = path[0];
-        while (true)
+        if (path.Length != 0)
         {
-            if (transform.position == currrentWaypoint)
+            Vector3 currrentWaypoint = path[0];
+            while (true)
             {
-                targetIndex++;
-                if (targetIndex >= path.Length)
+                if (transform.position == currrentWaypoint)
                 {
-                    yield break;
+                    targetIndex++;
+                    if (targetIndex >= path.Length)
+                    {
+                        yield break;
+                    }
+                    currrentWaypoint = path[targetIndex];
                 }
-                currrentWaypoint = path[targetIndex];
+                transform.position = Vector3.MoveTowards(transform.position, currrentWaypoint, speed * Time.deltaTime);
+                yield return null;
             }
-            transform.position = Vector3.MoveTowards(transform.position, currrentWaypoint, speed * Time.deltaTime);
-            yield return null;
         }
     }
 
