@@ -4,34 +4,39 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(Pathing))]
-public class PathingEditor : Editor {
+public class PathingEditor : Editor
+{
 
-   
-   
+
+    //test
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        //DrawDefaultInspector();
         Pathing myScript = (Pathing)target;
-        if(myScript.spawningNodes)      //Toggle spawning nodes on/off
+        GUILayout.BeginVertical("box");
+        GUILayout.Label("                                     Nodes");
+        if (myScript.spawningNodes)      //Toggle spawning nodes on/off
         {
-            if (GUILayout.Button("Nodes"))
+            if (GUILayout.Button("Stop Spawning Nodes"))
             {
                 myScript.spawningNodes = false;
             }
         }
         else
         {
-            if (GUILayout.Button("Nodes"))
+            if (GUILayout.Button("Start Spawning Nodes"))
             {
                 myScript.spawningNodes = true;
             }
         }
-       
+        GUILayout.BeginVertical("Box");
+        GUILayout.Label("Nodes Spawning Height = " + myScript.heightOffGround.ToString("F2"));
+        myScript.heightOffGround = GUILayout.HorizontalSlider(myScript.heightOffGround, 0, 10);
+        GUILayout.EndVertical();
+        GUILayout.EndVertical();
 
-       
+
     }
-
-    
 
     Texture getButtonTexture()
     {
@@ -43,9 +48,9 @@ public class PathingEditor : Editor {
     void OnSceneGUI()
     {
         Pathing myScript = (Pathing)target;
-        if (Event.current.type == EventType.MouseDown)
+        if (Event.current.type == EventType.MouseDown && Event.current.button == 0)
         {
-            if (myScript.spawningNodes)  PrepareNodeSpawn();
+            if (myScript.spawningNodes) PrepareNodeSpawn();
         }
         if (myScript.spawningNodes) Selection.activeGameObject = myScript.gameObject;
     }
@@ -64,15 +69,9 @@ public class PathingEditor : Editor {
         if (Physics.Raycast(ray, out hit, 100))
         {
             Debug.DrawLine(ray.origin, hit.point);
-            Pathing myScript = (Pathing)target;
-            myScript.PrintStuff(hit.collider.name);
         }
-            
-        
         return hit.point;
     }
-
-
 
 
 }
