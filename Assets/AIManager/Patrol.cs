@@ -17,11 +17,11 @@ public class Patrol : MonoBehaviour {
     {
 
         agent = GetComponent<NavMeshAgent>();
-        if (nodes.Count == 0)
+        if (isPatrolling && nodes.Count == 0)
         {
             Debug.Log("There are no nodes to move to...");
         }
-        if (nodes.Count == 1)
+        if (isPatrolling && nodes.Count == 1)
         {
             nodes.Add(this.gameObject);
         }

@@ -9,7 +9,7 @@ public class Seek : MonoBehaviour
     [HideInInspector]
     public bool toSeek = false;
     private NavMeshAgent agent;
-    public List<GameObject> nodes;
+    public List<GameObject> nodes = new List<GameObject>();
     public GameObject treeOfNodes;
     public bool isUsingNodes = false;
     public bool clearNodesOnTreeAdd = false;
@@ -55,7 +55,7 @@ public class Seek : MonoBehaviour
         {
             agent.destination = objectToSeekTo.transform.position;
         }
-        if (isUsingNodes & useAStarAlgorithm && !isFinished)
+        if (isUsingNodes && useAStarAlgorithm && !isFinished)
         {
             print("Node at: " + nodeAt);
             if (nodeAt >= nodes.Count)
@@ -67,13 +67,13 @@ public class Seek : MonoBehaviour
                 GetComponent<Unit>().OnPathFound);
                 nodeAt++;
             }
-            float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAt-1].transform.position);
+            float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAt - 1].transform.position);
             print("Distance Between Nodes: " + distance);
             if (distance <= 2.0f || updateRouteEveryFrame)
             {
                 GetComponent<Unit>().targetIndex = 0;
                 if (!updateRouteEveryFrame || distance <= 2.0f)
-                {             
+                {
                     PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAt].transform.position,
                     GetComponent<Unit>().OnPathFound);
                     print("Requesting New Path...");
@@ -81,7 +81,7 @@ public class Seek : MonoBehaviour
                 }
                 else if (updateRouteEveryFrame)
                 {
-                    PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAt-1].transform.position,
+                    PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAt - 1].transform.position,
                     GetComponent<Unit>().OnPathFound);
                 }
 
@@ -89,6 +89,26 @@ public class Seek : MonoBehaviour
 
 
         }
+        else if (!isUsingNodes && useAStarAlgorithm && !isFinished)
+        {
+            GetComponent<Unit>().target = objectToSeekTo.transform;
+            PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, objectToSeekTo.transform.position,
+            GetComponent<Unit>().OnPathFound);
+            //isFinished = true;
+        }
 
+    }
+    public void StopSeeking()
+    {
+        toSeek = false;
+        if (agent != null)
+            agent.Stop();
+    }
+    public void StartSeeking()
+    {
+        toSeek = true;
+        if (agent != null)
+            //agent.ResetPath();
+            agent.Resume();
     }
 }
