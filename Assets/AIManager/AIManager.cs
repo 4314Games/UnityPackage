@@ -102,16 +102,16 @@ public class AIManager : MonoBehaviour
                GetComponent<Seek>().isUsingNodes
                && GetComponent<Seek>().nodes.Count == 0)
             {
-                errorMessage = "There is no object to Seek to, Please assign one.";
+                errorMessage = "There is no object to Seek to, Please assign one.\n" + GetComponent<Seek>().ToString();
                 if (GetComponent<Seek>().isUsingNodes)
                 {
-                    errorMessage = "There are no nodes to Seek to, Please assign atleast one.";
+                    errorMessage = "There are no nodes to Seek to, Please assign atleast one.\n" + GetComponent<Seek>().ToString();
                     int counter = 0;
                     foreach (GameObject node in GetComponent<Seek>().nodes)
                     {
                         if (node == null)
                         {
-                            errorMessage = "Node (" + counter + ")" + " is not valid, Check if there is a valid gameobject.";
+                            errorMessage = "Node (" + counter + ")" + " is not valid, Check if there is a valid gameobject.\n" + GetComponent<Seek>().ToString();
                             return false;
                         }
                         counter++;
@@ -125,7 +125,7 @@ public class AIManager : MonoBehaviour
             typeOfErrorMessage = "Wander Component";
             if (GetComponent<Wander>().nodes.Count == 0)
             {
-                errorMessage = "There is are no nodes to Wander, Please assign atleast one.";
+                errorMessage = "There is are no nodes to Wander, Please assign atleast one.\n" + GetComponent<Wander>().ToString();
                 return false;
             }
             int counter = 0;
@@ -133,7 +133,7 @@ public class AIManager : MonoBehaviour
             {
                 if (node == null)
                 {
-                    errorMessage = "Node (" + counter + ")" + " is not valid, Check if there is a valid gameobject.";
+                    errorMessage = "Node (" + counter + ")" + " is not valid, Check if there is a valid gameobject.\n" + GetComponent<Wander>().ToString();
                     return false;
                 }
                 counter++;
@@ -144,7 +144,7 @@ public class AIManager : MonoBehaviour
             typeOfErrorMessage = "Patrol Component";
             if (GetComponent<Patrol>().nodes.Count == 0)
             {
-                errorMessage = "There is are no nodes to Patrol, Please assign atleast one.";
+                errorMessage = "There is are no nodes to Patrol, Please assign atleast one.\n" + GetComponent<Patrol>().ToString();
                 return false;
             }
             int counter = 0;
@@ -152,7 +152,7 @@ public class AIManager : MonoBehaviour
             {
                 if (node == null)
                 {
-                    errorMessage = "Node (" + counter + ")" + " is not valid, Check if there is a valid gameobject.";
+                    errorMessage = "Node (" + counter + ")" + " is not valid, Check if there is a valid gameobject.\n" + GetComponent<Patrol>().ToString();
                     return false;
                 }
                 counter++;
@@ -161,7 +161,12 @@ public class AIManager : MonoBehaviour
         }
         if (GetComponent<Flee>() != null)
         {
-
+            typeOfErrorMessage = "Flee Component";
+            if (GetComponent<Flee>().objectToFleeFrom == null)
+            {
+                errorMessage = "There is no valid gameobject, please attach one.\n" + GetComponent<Flee>().ToString();
+                return false;
+            }
         }
         if (GetComponent<Detection>() != null)
         {
@@ -173,7 +178,7 @@ public class AIManager : MonoBehaviour
             }
             if(GetComponent<Detection>().behaviourIndex == 0 && GetComponent<Seek>() == null)
             {
-                errorMessage = "There is no Seek component Attatched, please attach one.";
+                errorMessage = "There is no Seek component Attatched, please attach one.\n" + GetComponent<Seek>().ToString();
                 return false;
             }
         }
