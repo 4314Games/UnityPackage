@@ -8,7 +8,7 @@ public class Pathing : MonoBehaviour
 {
 
     public GameObject nodePrefab;
-    List<GameObject> city = new List<GameObject>();
+    public List<GameObject> city = new List<GameObject>();
 
     //Linking
     //int isThis1stNode = 0;
@@ -20,10 +20,13 @@ public class Pathing : MonoBehaviour
     public bool spawningNodes;
 
     public GameObject nodeLinking;  //Node other nodes are linking too
-    public bool isLinking;          //Are we linking nodes
+    public bool isLinking = false;          //Are we linking nodes
 
     public float heightOffGround;
     public GameObject linkIcon;
+    public GameObject tempNode;
+    public bool is1stNode;
+
     //TODO, look into adding tag at start of project
     void Start()
     {
@@ -58,6 +61,7 @@ public class Pathing : MonoBehaviour
     {
         city.Remove(p_GameObject);
         for (int x = 0; x < city.Count; x++) city[x].GetComponent<Node>().RemoveConnectedNode(p_GameObject);
+        nodeLinking = tempNode;
         Debug.Log("Node Removed");
     }
 

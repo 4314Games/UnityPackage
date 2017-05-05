@@ -11,7 +11,7 @@ public class PathingEditor : Editor
     //test
     public override void OnInspectorGUI()
     {
-        //DrawDefaultInspector();
+        DrawDefaultInspector();
         Pathing myScript = (Pathing)target;
         GUILayout.BeginVertical("box");
         GUILayout.Label("                                     Nodes");
@@ -52,7 +52,7 @@ public class PathingEditor : Editor
         {
             if (myScript.spawningNodes) PrepareNodeSpawn();
         }
-        if (myScript.spawningNodes) Selection.activeGameObject = myScript.gameObject;
+        if (myScript.spawningNodes || myScript.isLinking) Selection.activeGameObject = myScript.gameObject;
     }
 
     void PrepareNodeSpawn() //Spawn Node

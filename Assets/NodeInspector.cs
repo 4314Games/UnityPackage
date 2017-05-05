@@ -7,30 +7,31 @@ using UnityEditor;
 [CustomEditor(typeof(Node))]
 public class NodeInspector : Editor
 {
-    // bool first;
+    bool first;
     void OnSceneGUI()
     {
-        //if (!first)
+        if (!first)
+        {
+            Node myScript = (Node)target;
+            //if (Event.current.type == EventType.MouseDown)  //Double click connects node.
+            //{
+            //    Debug.Log("LftClick");
+            //}
+                //Debug.Log("Time:" + EditorApplication.timeSinceStartup + " | Current Node:", myScript.pathingScript.nodeLinking.gameObject);
+                myScript.StartConnectingNode();
+            //Event.current.Use();
+        //}
+            first = true;
+        }
+        //else if (Event.current.type == EventType.MouseMove)
         //{
-        Node myScript = (Node)target;
-        if (Event.current.type == EventType.MouseDown)  //Double click connects node.
-        {
-
-            //Debug.Log("Time:" + EditorApplication.timeSinceStartup + " | Current Node:", myScript.pathingScript.nodeLinking.gameObject);
-            myScript.StartConnectingNode();
-            // Event.current.Use();
-        }
-        //first = true;
-        // }
-        else if (Event.current.type == EventType.MouseMove)
-        {
-            if (myScript.pathingScript.isLinking) Selection.activeGameObject = myScript.pathingScript.nodeLinking;
-        }
+        //    if (myScript.pathingScript.isLinking) Selection.activeGameObject = myScript.pathingScript.nodeLinking;
+        //}
     }
 
     public override void OnInspectorGUI()
     {
-        //DrawDefaultInspector();
+        DrawDefaultInspector();
         Node myScript = (Node)target;
 
         //Linking Button
