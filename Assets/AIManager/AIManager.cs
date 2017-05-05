@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//Kyle Norton 2017
 public class AIManager : MonoBehaviour
 {
     [HideInInspector]
@@ -91,7 +92,7 @@ public class AIManager : MonoBehaviour
     {
         CheckScripts();
     }
-    public bool CheckScripts()
+    public bool CheckScripts()//Check if each script has every component needed to work.
     {
         if (GetComponent<Seek>() != null)
         {

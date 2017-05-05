@@ -70,6 +70,6 @@ public class Detection : MonoBehaviour
     }
     public void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(transform.position, radius);//Draw sphere to show radius
     }
 }

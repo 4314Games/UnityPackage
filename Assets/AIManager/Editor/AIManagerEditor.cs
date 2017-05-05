@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+//Kyle Norton 2017
 [CustomEditor(typeof(AIManager))]
-
 public class AIManagerEditor : Editor
 {
 
@@ -190,7 +190,7 @@ public class AIManagerEditor : Editor
     {
         if (!script.CheckScripts())
         {
-            if (EditorUtility.DisplayDialog(script.typeOfErrorMessage, script.errorMessage, "Okay"))
+            if (EditorUtility.DisplayDialog(script.typeOfErrorMessage, script.errorMessage, "Okay"))//Throw error box if scrips areb't correct and then shutdown application/game.
             {
                 EditorApplication.isPlaying = false;
             }

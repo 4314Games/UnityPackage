@@ -11,7 +11,7 @@ public class DetectionEditor : Editor {
     {
         Detection script = (Detection)target;
         DrawDefaultInspector();
-        editorIndex = EditorGUILayout.Popup("Behaviour", editorIndex, options);
+        editorIndex = EditorGUILayout.Popup("Behaviour", editorIndex, options);//Dropdown list of behaviours
         script.OnBehaviour(editorIndex);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
+//Kyle Norton 2017
 public class Patrol : MonoBehaviour {
     public List<GameObject> nodes;
 
