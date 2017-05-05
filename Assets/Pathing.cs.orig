@@ -61,11 +61,12 @@ public class Pathing : MonoBehaviour
     {
         city.Remove(p_GameObject);
         for (int x = 0; x < city.Count; x++) city[x].GetComponent<Node>().RemoveConnectedNode(p_GameObject);
-
+<<<<<<< Updated upstream
         nodeLinking = tempNode;
-
+        Debug.Log("Node Removed");
+=======
         //Debug.Log("Node Removed");
-
+>>>>>>> Stashed changes
     }
 
 
