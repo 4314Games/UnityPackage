@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+//Kyle Norton 2017
 
 public class Detection : MonoBehaviour
 {

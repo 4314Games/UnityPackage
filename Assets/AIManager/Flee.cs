@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//Kyle Norton 2017
 
 public class Flee : MonoBehaviour {
     [HideInInspector] public bool toFlee = false;
