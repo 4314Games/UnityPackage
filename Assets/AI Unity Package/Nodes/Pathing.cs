@@ -28,9 +28,9 @@ public class Pathing : MonoBehaviour
     public bool is1stNode;
 
     //TODO, look into adding tag at start of project
-    void Start()
+    void Awake()
     {
-
+       
     }
 
     public void PrintStuff(string p_stuff)
@@ -67,7 +67,6 @@ public class Pathing : MonoBehaviour
         //Debug.Log("Node Removed");
 
     }
-
 
 
 

@@ -22,7 +22,7 @@ public class Node : MonoBehaviour {
 
     void Start()
     {
-        pathingScript = GameObject.Find("AI/Pathing Prefab").GetComponent<Pathing>();
+        pathingScript = GameObject.Find("AI_Pathing Prefab").GetComponent<Pathing>();
     }
 
     public void Construct(int p_id) //Constructs Node
@@ -74,6 +74,12 @@ public class Node : MonoBehaviour {
     {
         if (isLinking) pathingScript.isLinking = false;
         pathingScript.RemoveNode(gameObject);
+    }
+
+    public void Destroyer()
+    {
+        pathingScript.RemoveNode(gameObject);
+        DestroyImmediate(gameObject);
     }
 
     public void OnDrawGizmos()

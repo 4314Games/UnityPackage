@@ -11,7 +11,7 @@ public class PathingEditor : Editor
     //test
     public override void OnInspectorGUI()
     {
-       // DrawDefaultInspector();
+        //DrawDefaultInspector();
         Pathing myScript = (Pathing)target;
         GUILayout.BeginVertical("box");
         GUILayout.Label("                                     Nodes");
@@ -46,6 +46,15 @@ public class PathingEditor : Editor
             {
                 myScript.isLinking = true;
             }
+        }
+        if (GUILayout.Button("Clear All Nodes"))
+        {
+            int count = myScript.city.Count;
+            Debug.Log("Count = " + count);
+            for(int x  = count - 1; x > -1; x--)
+            {
+                myScript.city[x].GetComponent<Node>().Destroyer();
+            } 
         }
         GUILayout.EndVertical();
 
