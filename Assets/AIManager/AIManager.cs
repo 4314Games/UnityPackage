@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 //Kyle Norton 2017
+[RequireComponent(typeof(Unit))]
 public class AIManager : MonoBehaviour
 {
     [HideInInspector]
