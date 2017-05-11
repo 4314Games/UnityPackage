@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+#if UNITY_EDITOR
 using UnityEditor;
 
-
 [ExecuteInEditMode]
+#endif
 public class Node : MonoBehaviour {
 
     public Pathing pathingScript;

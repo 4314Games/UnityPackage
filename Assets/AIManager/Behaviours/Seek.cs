@@ -4,34 +4,37 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Seek : MonoBehaviour
 {
+    public bool toSeek = false;
     public bool useAStarAlgorithm = false;
     public GameObject objectToSeekTo;
-    [HideInInspector]
-    public bool toSeek = false;
     private NavMeshAgent agent;
     public List<GameObject> nodes = new List<GameObject>();
     public GameObject treeOfNodes;
     public bool isUsingNodes = false;
     public bool clearNodesOnTreeAdd = false;
-    private int nodeAt = 0;
+    public int nodeAt = 0;
     private bool isFinished = false;
-
     public bool updateRouteEveryFrame = true;
     // Use this for initialization
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        if (GetComponent<NavMeshAgent>() != null)
+            agent = GetComponent<NavMeshAgent>();
         if (objectToSeekTo == null)
         {
             Debug.Log("There is no object to seek to...");
         }
         if (useAStarAlgorithm && isUsingNodes)
         {
-            agent.enabled = false;
-            gameObject.AddComponent<Unit>();
-            //GetComponent<Unit>().target = nodes[0].transform;
+            if (GetComponent<NavMeshAgent>() != null)
+                agent.enabled = false;
         }
 
+    }
+    void Awake()
+    {
+        if (isUsingNodes)
+            InsertTreeOfNodes();
     }
     public void InsertTreeOfNodes()
     {
@@ -53,11 +56,11 @@ public class Seek : MonoBehaviour
     {
         if (toSeek && !useAStarAlgorithm)
         {
-            agent.destination = objectToSeekTo.transform.position;
+            if (GetComponent<NavMeshAgent>() != null)
+                agent.destination = objectToSeekTo.transform.position;
         }
-        if (isUsingNodes && useAStarAlgorithm && !isFinished)
+        if (toSeek && isUsingNodes && useAStarAlgorithm && !isFinished)
         {
-            print("Node at: " + nodeAt);
             if (nodeAt >= nodes.Count)
                 isFinished = true;
             if (nodeAt == 0)
@@ -68,15 +71,14 @@ public class Seek : MonoBehaviour
                 nodeAt++;
             }
             float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAt - 1].transform.position);
-            print("Distance Between Nodes: " + distance);
             if (distance <= 2.0f || updateRouteEveryFrame)
             {
-                GetComponent<Unit>().targetIndex = 0;
-                if (!updateRouteEveryFrame || distance <= 2.0f)
+                if (!updateRouteEveryFrame && distance <= 2.0f)
                 {
+                    GetComponent<Unit>().targetIndex = 0;
+                    GetComponent<Unit>().target = nodes[nodeAt].transform;
                     PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAt].transform.position,
                     GetComponent<Unit>().OnPathFound);
-                    print("Requesting New Path...");
                     nodeAt++;
                 }
                 else if (updateRouteEveryFrame)
@@ -84,31 +86,14 @@ public class Seek : MonoBehaviour
                     PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAt - 1].transform.position,
                     GetComponent<Unit>().OnPathFound);
                 }
-
             }
-
-
         }
-        else if (!isUsingNodes && useAStarAlgorithm && !isFinished)
+        else if (!isUsingNodes && useAStarAlgorithm && !isFinished && toSeek)
         {
             GetComponent<Unit>().target = objectToSeekTo.transform;
             PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, objectToSeekTo.transform.position,
             GetComponent<Unit>().OnPathFound);
-            //isFinished = true;
         }
 
-    }
-    public void StopSeeking()
-    {
-        toSeek = false;
-        if (agent != null)
-            agent.Stop();
-    }
-    public void StartSeeking()
-    {
-        toSeek = true;
-        if (agent != null)
-            //agent.ResetPath();
-            agent.Resume();
     }
 }

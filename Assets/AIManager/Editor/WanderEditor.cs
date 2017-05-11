@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Wander))]
+//[CustomEditor(typeof(Wander))]
 public class WanderEditor : Editor {
 
     public override void OnInspectorGUI()

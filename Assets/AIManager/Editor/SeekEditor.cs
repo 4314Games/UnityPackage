@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(Seek))]
+//[CustomEditor(typeof(Seek))]
 public class SeekEditor : Editor
 {
 

@@ -91,7 +91,8 @@ public class AIManager : MonoBehaviour
     }
     public void Awake()
     {
-        CheckScripts();
+        //CheckScripts();
+        //UpdateAIFunction();
     }
     public bool CheckScripts()//Check if each script has every component needed to work.
     {
@@ -177,7 +178,7 @@ public class AIManager : MonoBehaviour
                 errorMessage = "There is no valid gameobject, please attach one.";
                 return false;
             }
-            if(GetComponent<Detection>().behaviourIndex == 0 && GetComponent<Seek>() == null)
+            if(GetComponent<Detection>().behaviour == "Seek" && GetComponent<Seek>() == null)
             {
                 errorMessage = "There is no Seek component Attatched, please attach one.\n" + GetComponent<Seek>().ToString();
                 return false;

@@ -6,30 +6,33 @@ using UnityEngine.AI;
 
 public class Detection : MonoBehaviour
 {
+    public bool toDetect = false;
+    public bool toChase = false;
     public GameObject objectToDetect;
     public float radius = 10.0f;
-    public bool toChase = false;
-    public bool toDetect = false;
-    public int behaviourIndex = -1;
+    public string behaviour = "Seek";
     //private NavMeshAgent agent;
     // Use this for initialization
     void Start()
     {
         //agent = GetComponent<NavMeshAgent>();
     }
-
+    void Awake()
+    {
+        GetComponent<Seek>().objectToSeekTo = objectToDetect;
+    }
     // Update is called once per frame
     void Update()
     {
         float distance = Vector3.Distance(transform.position, objectToDetect.transform.position);
-        if (distance <= radius)
+        if (distance <= radius && toDetect && toChase)
         {
-            switch (behaviourIndex)
+            switch (behaviour)
             {
-                case 0:
+                case "Seek":
                     if (GetComponent<Seek>() != null)
                     {
-                        GetComponent<Seek>().StartSeeking();
+                        GetComponent<Seek>().toSeek = true;
                         GetComponent<Seek>().objectToSeekTo = objectToDetect;
                         
                     }
@@ -40,15 +43,15 @@ public class Detection : MonoBehaviour
                     break;
             }
         }
-        else if(distance > radius)
+        else if(distance > radius && toDetect && toChase)
         {
-            switch (behaviourIndex)
+            switch (behaviour)
             {
-                case 0:
+                case "Seek":
                     if (GetComponent<Seek>() != null)
                     {
-                        GetComponent<Seek>().StopSeeking();
-                        print("Cannot See " + objectToDetect.ToString() + " - " + distance + " units away.");
+                        GetComponent<Seek>().toSeek = false;
+                        //print("Cannot See " + objectToDetect.ToString() + " - " + distance + " units away.");
                     }
                     else
                         print("There is no Seek Component Attatched...");
@@ -63,7 +66,7 @@ public class Detection : MonoBehaviour
         switch (index)
         {
             case 0://Seek
-                behaviourIndex = 0;
+                behaviour = "Seek";
                 break;
             default:
                 break;

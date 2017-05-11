@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-[CustomEditor(typeof(Detection))]
+//[CustomEditor(typeof(Detection))]
 //Kyle Norton 2017
 public class DetectionEditor : Editor
 {

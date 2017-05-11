@@ -28,7 +28,7 @@ public class AIManagerEditor : Editor
     string detectionButtonAddString = "Add Detection Component";
     string detectionButtonRemoveString = "Remove Detection Component";
 
-    public string[] options = new string[] { "Seek", "Wander", "Patrol", "Flee", "Dection" };
+    public string[] options = new string[] { "Seek", "Wander", "Patrol", "Flee", "Detection" };
     public int index = 0;
 
     public void SetupButtonText(AIManager script)
@@ -61,52 +61,38 @@ public class AIManagerEditor : Editor
     public override void OnInspectorGUI()
     {
         AIManager script = (AIManager)target;
+
         SetupButtonText(script);
         DrawDefaultInspector();
-        if (EditorPrefs.HasKey("index"))
-            index = EditorPrefs.GetInt("index");
-        index = EditorGUILayout.Popup("Behaviour", index, options);
-        EditorPrefs.SetInt("index", index);
-        switch (index)
-        {
-            case 0:
-                script.toWander = false;
-                script.toPatrol = false;
-                script.toFlee = false;
-                script.toDetect = false;
-                script.toSeek = true;
-                break;
-            case 1:
-                script.toWander = true;
-                script.toPatrol = false;
-                script.toFlee = false;
-                script.toDetect = false;
-                script.toSeek = false;
-                break;
-            case 2:
-                script.toWander = false;
-                script.toPatrol = true;
-                script.toFlee = false;
-                script.toDetect = false;
-                script.toSeek = false;
-                break;
-            case 3:
-                script.toWander = false;
-                script.toPatrol = false;
-                script.toFlee = true;
-                script.toDetect = false;
-                script.toSeek = false;
-                break;
-            case 4:
-                script.toWander = false;
-                script.toPatrol = false;
-                script.toFlee = false;
-                script.toDetect = true;
-                script.toSeek = false;
-                break;
-            default:
-                break;
-        }
+        //if (EditorPrefs.HasKey("index"))
+        //    index = EditorPrefs.GetInt("index");
+        //index = EditorGUILayout.Popup("Behaviour", index, options);
+        //EditorPrefs.SetInt("index", index);
+        //switch (index)
+        //{
+        //    case 0:
+        //        if (script.GetComponent<Seek>() != null)
+        //            script.GetComponent<Seek>().toSeek = true;
+        //        break;
+        //    case 1:
+        //        if (script.GetComponent<Wander>() != null)
+        //            script.GetComponent<Wander>().toWander = true;
+        //        break;
+        //    case 2:
+        //        if (script.GetComponent<Patrol>() != null)
+        //            script.GetComponent<Patrol>().toPatrol = true;
+        //        break;
+        //    case 3:
+        //        if (script.GetComponent<Flee>() != null)
+        //            script.GetComponent<Flee>().toFlee = true;
+        //        break;
+        //    case 4:
+        //        if (script.GetComponent<Detection>() != null)
+        //            script.GetComponent<Detection>().toDetect = true;
+        //        break;
+        //    default:
+        //        break;
+        //}
 
         if (GUILayout.Button(seekButtonString))
         {
@@ -174,7 +160,7 @@ public class AIManagerEditor : Editor
                 script.detectionAdded = true;
             }
         }
-        script.UpdateAIFunction();
+       // script.UpdateAIFunction();
         if (EditorApplication.isPlaying && EditorPrefs.GetBool("Start"))
         {
             EditorPrefs.SetBool("Start", false);

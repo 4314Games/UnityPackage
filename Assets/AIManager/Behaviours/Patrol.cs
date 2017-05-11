@@ -5,12 +5,11 @@ using UnityEngine.AI;
 //Kyle Norton 2017
 public class Patrol : MonoBehaviour
 {
+    public bool toPatrol = false;
     public List<GameObject> nodes;
     public GameObject treeOfNodes;
     public bool clearNodesOnTreeAdd = false;
     private NavMeshAgent agent;
-    [HideInInspector]
-    public bool toPatrol = false;
     private bool isPatrolling = false;  
     private int nodeAt = 0;
     private int nodeAtAStar = 0;
@@ -36,7 +35,10 @@ public class Patrol : MonoBehaviour
             if (GetComponent<NavMeshAgent>() != null)
                 GetComponent<NavMeshAgent>().enabled = false;
     }
-
+    void Awake()
+    {
+        InsertTreeOfNodes();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -130,7 +132,7 @@ public class Patrol : MonoBehaviour
             {
                 traverseForwards = false;
                 nodeAtAStar = nodes.Count - 1;
-            distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);
+                distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);
             }
             GetComponent<Unit>().targetIndex = 0;
             GetComponent<Unit>().target = nodes[nodeAtAStar].transform;

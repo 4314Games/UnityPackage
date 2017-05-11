@@ -8,7 +8,7 @@ public class Grid : MonoBehaviour {
     public Vector2 gridWorldSize;
     public float nodeRadius;
     AStarNode[,] grid;
-
+    
 	float nodeDiameter;
 	int gridSizeX, gridSizeY;
 
@@ -17,7 +17,6 @@ public class Grid : MonoBehaviour {
 		nodeDiameter = nodeRadius * 2;
 		gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
 		gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
-
 		CreateGrid ();
 
     }
@@ -42,13 +41,10 @@ public class Grid : MonoBehaviour {
     {
         float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
         float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
-
         percentX = Mathf.Clamp01(percentX);
         percentY = Mathf.Clamp01(percentY);
-        
         int x = Mathf.RoundToInt((gridSizeX-1) * percentX);
         int y = Mathf.RoundToInt((gridSizeY-1) * percentY);
-
         return grid[x, y];
     }
     public List<AStarNode> GetNeighbours(AStarNode node)

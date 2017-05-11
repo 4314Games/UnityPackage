@@ -5,12 +5,11 @@ using UnityEngine.AI;
 
 public class Wander : MonoBehaviour
 {
+    public bool toWander = false;
     public bool useAStar = false;
     private bool firstTraversal = true;
     public List<GameObject> nodes;
     public float distanceToNextWander = 0.5f;
-    [HideInInspector]
-    public bool toWander = false;
     private NavMeshAgent agent;
 
 
@@ -22,24 +21,32 @@ public class Wander : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        if (GetComponent<NavMeshAgent>() != null)
+        {
+            agent = GetComponent<NavMeshAgent>();
+        }
         if (useAStar)
         {
             if (GetComponent<Unit>() == null)
                 gameObject.AddComponent<Unit>();
-
-            agent.enabled = false;
-            randomPosition = Random.Range(0, nodes.Capacity);
+            if (GetComponent<NavMeshAgent>() != null)
+            {
+                agent.enabled = false;
+            }
+            randomPosition = Random.Range(0, nodes.Count);
             nodeTraversingTo = randomPosition;
             GetComponent<Unit>().target = nodes[randomPosition].transform;
         }
        
     }
-
+    void Awake()
+    {
+        InsertTreeOfNodes();
+    }
     // Update is called once per frame
     void Update()
     {
-        if (agent.enabled == true)
+        if (agent != null && agent.enabled == true)
         {
             if (agent.remainingDistance < distanceToNextWander && toWander)
             {
@@ -47,7 +54,7 @@ public class Wander : MonoBehaviour
             }
         }
 
-        if (useAStar && toWander)
+        else if (useAStar && toWander)
         {
             if (GetComponent<Unit>() != null)
                 AStarWander();
@@ -87,10 +94,10 @@ public class Wander : MonoBehaviour
             PathRequestManager.RequestPath(GetComponent<Unit>().transform.position,
             nodes[randomPosition].transform.position, GetComponent<Unit>().OnPathFound);
         }
-        randomPosition = Random.Range(0, nodes.Capacity);
+        randomPosition = Random.Range(0, nodes.Count);
         Vector3 destination = nodes[randomPosition].transform.position;
         float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeTraversingTo].transform.position);
-        print("Distance Between Nodes: " + distance);
+        //print("Distance Between Nodes: " + distance);
         //Get a random point within the node range and set a temp destination.
         if (distance <= 2.0f)
         {
