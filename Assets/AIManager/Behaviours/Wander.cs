@@ -11,7 +11,7 @@ public class Wander : MonoBehaviour
     public List<GameObject> nodes;
     public float distanceToNextWander = 2.0f;
     private NavMeshAgent agent;
-
+    private PathRequestManager thisPathRequestManager;
 
     public GameObject treeOfNodes;
     public bool clearNodesOnTreeAdd = false;
@@ -41,6 +41,7 @@ public class Wander : MonoBehaviour
     }
     void Awake()
     {
+        thisPathRequestManager = new PathRequestManager();
         InsertTreeOfNodes();
     }
     // Update is called once per frame
