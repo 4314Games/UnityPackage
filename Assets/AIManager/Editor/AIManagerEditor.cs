@@ -60,111 +60,111 @@ public class AIManagerEditor : Editor
     }
     public override void OnInspectorGUI()
     {
-        AIManager script = (AIManager)target;
-
-        SetupButtonText(script);
+        GameObject script = ((MonoBehaviour)target).gameObject;
+        //Debug.Log("Object being targeted: " + script);
+        SetupButtonText(script.GetComponent<AIManager>());
         DrawDefaultInspector();
         //if (EditorPrefs.HasKey("index"))
-        //    index = EditorPrefs.GetInt("index");
-        //index = EditorGUILayout.Popup("Behaviour", index, options);
-        //EditorPrefs.SetInt("index", index);
-        //switch (index)
-        //{
-        //    case 0:
-        //        if (script.GetComponent<Seek>() != null)
-        //            script.GetComponent<Seek>().toSeek = true;
-        //        break;
-        //    case 1:
-        //        if (script.GetComponent<Wander>() != null)
-        //            script.GetComponent<Wander>().toWander = true;
-        //        break;
-        //    case 2:
-        //        if (script.GetComponent<Patrol>() != null)
-        //            script.GetComponent<Patrol>().toPatrol = true;
-        //        break;
-        //    case 3:
-        //        if (script.GetComponent<Flee>() != null)
-        //            script.GetComponent<Flee>().toFlee = true;
-        //        break;
-        //    case 4:
-        //        if (script.GetComponent<Detection>() != null)
-        //            script.GetComponent<Detection>().toDetect = true;
-        //        break;
-        //    default:
-        //        break;
-        //}
+            //script.GetComponent<AIManager>().index = EditorPrefs.GetInt("index");
+        script.GetComponent<AIManager>().index = EditorGUILayout.Popup("Behaviour", script.GetComponent<AIManager>().index, options);
+        //EditorPrefs.SetInt("index", script.GetComponent<AIManager>().index);
+        switch (script.GetComponent<AIManager>().index)
+        {
+            case 0:
+                if (script.GetComponent<Seek>() != null)
+                    script.GetComponent<Seek>().toSeek = true;
+                break;
+            case 1:
+                if (script.GetComponent<Wander>() != null)
+                    script.GetComponent<Wander>().toWander = true;
+                break;
+            case 2:
+                if (script.GetComponent<Patrol>() != null)
+                    script.GetComponent<Patrol>().toPatrol = true;
+                break;
+            case 3:
+                if (script.GetComponent<Flee>() != null)
+                    script.GetComponent<Flee>().toFlee = true;
+                break;
+            case 4:
+                if (script.GetComponent<Detection>() != null)
+                    script.GetComponent<Detection>().toDetect = true;
+                break;
+            default:
+                break;
+        }
 
         if (GUILayout.Button(seekButtonString))
         {
-            if (script.seekAdded && script.GetComponent<Seek>() != null)
+            if (script.GetComponent<AIManager>().seekAdded && script.GetComponent<Seek>() != null)
             {
                 DestroyImmediate(script.GetComponent<Seek>());
-                script.seekAdded = false;
+                script.GetComponent<AIManager>().seekAdded = false;
             }
-            else if (!script.seekAdded)
+            else if (!script.GetComponent<AIManager>().seekAdded)
             {
                 script.gameObject.AddComponent<Seek>();
-                script.seekAdded = true;
+                script.GetComponent<AIManager>().seekAdded = true;
             }
 
         }
         if (GUILayout.Button(wanderButtonString))
         {
-            if (script.wanderAdded && script.GetComponent<Wander>() != null)
+            if (script.GetComponent<AIManager>().wanderAdded && script.GetComponent<Wander>() != null)
             {
                 DestroyImmediate(script.GetComponent<Wander>());
-                script.wanderAdded = false;
+                script.GetComponent<AIManager>().wanderAdded = false;
             }
-            else if (!script.wanderAdded)
+            else if (!script.GetComponent<AIManager>().wanderAdded)
             {
                 script.gameObject.AddComponent<Wander>();
-                script.wanderAdded = true;
+                script.GetComponent<AIManager>().wanderAdded = true;
             }
         }
         if (GUILayout.Button(patrolButtonString))
         {
-            if (script.patrolAdded && script.GetComponent<Patrol>() != null)
+            if (script.GetComponent<AIManager>().patrolAdded && script.GetComponent<Patrol>() != null)
             {
                 DestroyImmediate(script.GetComponent<Patrol>());
-                script.patrolAdded = false;
+                script.GetComponent<AIManager>().patrolAdded = false;
             }
-            else if (!script.patrolAdded)
+            else if (!script.GetComponent<AIManager>().patrolAdded)
             {
                 script.gameObject.AddComponent<Patrol>();
-                script.patrolAdded = true;
+                script.GetComponent<AIManager>().patrolAdded = true;
             }
         }
         if (GUILayout.Button(fleeButtonString))
         {
-            if (script.fleeAdded && script.GetComponent<Flee>() != null)
+            if (script.GetComponent<AIManager>().fleeAdded && script.GetComponent<Flee>() != null)
             {
                 DestroyImmediate(script.GetComponent<Flee>());
-                script.fleeAdded = false;
+                script.GetComponent<AIManager>().fleeAdded = false;
             }
-            else if (!script.fleeAdded)
+            else if (!script.GetComponent<AIManager>().fleeAdded)
             {
                 script.gameObject.AddComponent<Flee>();
-                script.fleeAdded = true;
+                script.GetComponent<AIManager>().fleeAdded = true;
             }
         }
         if (GUILayout.Button(detectionButtonString))
         {
-            if (script.detectionAdded && script.GetComponent<Detection>() != null)
+            if (script.GetComponent<AIManager>().detectionAdded && script.GetComponent<Detection>() != null)
             {
                 DestroyImmediate(script.GetComponent<Detection>());
-                script.detectionAdded = false;
+                script.GetComponent<AIManager>().detectionAdded = false;
             }
-            else if (!script.detectionAdded)
+            else if (!script.GetComponent<AIManager>().detectionAdded)
             {
                 script.gameObject.AddComponent<Detection>();
-                script.detectionAdded = true;
+                script.GetComponent<AIManager>().detectionAdded = true;
             }
         }
        // script.UpdateAIFunction();
         if (EditorApplication.isPlaying && EditorPrefs.GetBool("Start"))
         {
             EditorPrefs.SetBool("Start", false);
-            CheckScriptsEditor(script);
+            CheckScriptsEditor(script.GetComponent<AIManager>());
 
         }
     }

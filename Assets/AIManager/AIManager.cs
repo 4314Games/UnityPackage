@@ -6,6 +6,8 @@ using UnityEngine;
 public class AIManager : MonoBehaviour
 {
     [HideInInspector]
+    public int index = 0;
+    [HideInInspector]
     public bool toWander = false;
     [HideInInspector]
     public bool toSeek = false;

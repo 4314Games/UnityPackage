@@ -18,7 +18,10 @@ public class PathRequestManager : MonoBehaviour {
         instance = this;
         pathFinding = GetComponent<PathFinding>();
     }
-
+    public static void ClearPath()
+    {
+        instance.pathRequestQueue.Clear();
+    }
     public static void RequestPath(Vector3 pathStart,Vector3 pathEnd, Action<Vector3[],bool> callback)
     {
         PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback);

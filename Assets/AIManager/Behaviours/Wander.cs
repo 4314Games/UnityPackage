@@ -9,7 +9,7 @@ public class Wander : MonoBehaviour
     public bool useAStar = false;
     private bool firstTraversal = true;
     public List<GameObject> nodes;
-    public float distanceToNextWander = 0.5f;
+    public float distanceToNextWander = 2.0f;
     private NavMeshAgent agent;
 
 
@@ -91,6 +91,9 @@ public class Wander : MonoBehaviour
         if (firstTraversal)
         {
             firstTraversal = !firstTraversal;
+            PathRequestManager.ClearPath();
+            GetComponent<Unit>().targetIndex = 0;
+            GetComponent<Unit>().target = nodes[randomPosition].transform;
             PathRequestManager.RequestPath(GetComponent<Unit>().transform.position,
             nodes[randomPosition].transform.position, GetComponent<Unit>().OnPathFound);
         }
@@ -99,9 +102,10 @@ public class Wander : MonoBehaviour
         float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeTraversingTo].transform.position);
         //print("Distance Between Nodes: " + distance);
         //Get a random point within the node range and set a temp destination.
-        if (distance <= 2.0f)
+        if (distance <= distanceToNextWander)
         {
             nodeTraversingTo = randomPosition;
+            PathRequestManager.ClearPath();
             GetComponent<Unit>().targetIndex = 0;
             GetComponent<Unit>().target = nodes[randomPosition].transform;
             PathRequestManager.RequestPath(GetComponent<Unit>().transform.position,

@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-//[CustomEditor(typeof(Patrol))]
+[CustomEditor(typeof(Patrol))]
 public class PatrolEditor : Editor
 {
 
     public override void OnInspectorGUI()
     {
-        Patrol script = (Patrol)target;
+        GameObject script = ((MonoBehaviour)target).gameObject;
         DrawDefaultInspector();
         if (GUILayout.Button("Update List with Tree"))
         {
-            script.InsertTreeOfNodes();
+            script.GetComponent<Patrol>().InsertTreeOfNodes();
         }
         if (GUILayout.Button("Clear list of nodes"))
         {
-            script.ClearTreeOfNodes();
+            script.GetComponent<Patrol>().ClearTreeOfNodes();
         }
     }
 }

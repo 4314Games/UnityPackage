@@ -10,13 +10,14 @@ public class Patrol : MonoBehaviour
     public GameObject treeOfNodes;
     public bool clearNodesOnTreeAdd = false;
     private NavMeshAgent agent;
-    private bool isPatrolling = false;  
+    public bool isPatrolling = false;
+    public float distanceToNextPatrol = 2.0f;
     private int nodeAt = 0;
     private int nodeAtAStar = 0;
     public bool gotoStart = false;
     private bool reachedEnd = false;
     public bool useAStar = false;
-    private bool traverseForwards = true;
+    public bool traverseForwards = true;
     private bool firstNode = true;
     // Use this for initialization
     void Start()
@@ -42,32 +43,27 @@ public class Patrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        try
-        {
-            if (toPatrol && !useAStar && agent != null)
-            {
-                if (agent.remainingDistance < 0.5f)
-                {
-                    PatrolTo();
-                }
-            }
-            else if (toPatrol && useAStar)
-            {
-                if (firstNode)
-                {
-                    GetComponent<Unit>().targetIndex = 0;
-                    GetComponent<Unit>().target = nodes[0].transform;
-                    PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[0].transform.position,
-                    GetComponent<Unit>().OnPathFound);
-                    firstNode = false;
-                }
 
-                PatrolToAStar();
+        if (toPatrol && !useAStar && agent != null && isPatrolling)
+        {
+            if (agent.remainingDistance < distanceToNextPatrol)
+            {
+                PatrolTo();
             }
         }
-        catch (System.ArgumentOutOfRangeException)
+        else if (toPatrol && useAStar && isPatrolling)
         {
-            throw;
+            if (firstNode)
+            {
+                PathRequestManager.ClearPath();
+                GetComponent<Unit>().targetIndex = 0;
+                GetComponent<Unit>().target = nodes[0].transform;
+                PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[0].transform.position,
+                GetComponent<Unit>().OnPathFound);
+                firstNode = false;
+            }
+
+            PatrolToAStar();
         }
 
     }
@@ -125,7 +121,8 @@ public class Patrol : MonoBehaviour
     public void PatrolToAStar()
     {
         float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);
-        if (traverseForwards && distance <= 2.0f)
+        //print(distance);
+        if (traverseForwards && distance <= distanceToNextPatrol)
         {
             nodeAtAStar++;
             if (nodeAtAStar >= nodes.Count)
@@ -134,13 +131,14 @@ public class Patrol : MonoBehaviour
                 nodeAtAStar = nodes.Count - 1;
                 distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);
             }
+            PathRequestManager.ClearPath();
             GetComponent<Unit>().targetIndex = 0;
             GetComponent<Unit>().target = nodes[nodeAtAStar].transform;
             PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position,
             GetComponent<Unit>().OnPathFound);
-
+            print("Traversing to - ..." + nodeAtAStar);
         }
-        else if (!traverseForwards && distance <= 2.0f)
+        else if (!traverseForwards && distance <= distanceToNextPatrol)
         {
             if (!gotoStart)
             {
@@ -150,6 +148,7 @@ public class Patrol : MonoBehaviour
                     traverseForwards = true;
                     nodeAtAStar = 0;
                 }
+                PathRequestManager.ClearPath();
                 GetComponent<Unit>().targetIndex = 0;
                 GetComponent<Unit>().target = nodes[nodeAtAStar].transform;
                 PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position,
@@ -159,15 +158,13 @@ public class Patrol : MonoBehaviour
             {
                 traverseForwards = true;
                 nodeAtAStar = 0;
+                PathRequestManager.ClearPath();
                 GetComponent<Unit>().targetIndex = 0;
                 GetComponent<Unit>().target = nodes[nodeAtAStar].transform;
                 PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position,
                 GetComponent<Unit>().OnPathFound);
             }
-
-
         }
-
     }
     public void InsertTreeOfNodes()
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-//[CustomEditor(typeof(Detection))]
+[CustomEditor(typeof(Detection))]
 //Kyle Norton 2017
 public class DetectionEditor : Editor
 {
@@ -11,9 +11,9 @@ public class DetectionEditor : Editor
     // Use this for initialization
     public override void OnInspectorGUI()
     {
-        Detection script = (Detection)target;
+        GameObject script = ((MonoBehaviour)target).gameObject;
         DrawDefaultInspector();
         editorIndex = EditorGUILayout.Popup("Behaviour", editorIndex, options);//Dropdown list of behaviours
-        script.OnBehaviour(editorIndex);
+        script.GetComponent<Detection>().OnBehaviour(editorIndex);
     }
 }
