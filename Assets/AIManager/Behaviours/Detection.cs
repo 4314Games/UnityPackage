@@ -6,26 +6,21 @@ using UnityEngine.AI;
 
 public class Detection : MonoBehaviour
 {
-    public bool toDetect = false;
-    public bool toChase = false;
-    public GameObject objectToDetect;
-    public float radius = 10.0f;
-    public string behaviour = "Seek";
-    //private NavMeshAgent agent;
-    // Use this for initialization
-    void Start()
-    {
-        //agent = GetComponent<NavMeshAgent>();
-    }
+    public bool toDetect = false;//Wether to detect or not
+    public bool toChase = false;//Wether to chase the object
+    public GameObject objectToDetect;//the object to detect
+    public float radius = 10.0f;//detection radius
+    public string behaviour = "Seek";//behaviour to peform on detection
+
     void Awake()
     {
-        GetComponent<Seek>().objectToSeekTo = objectToDetect;
+        if(behaviour == "SeeK")
+            GetComponent<Seek>().objectToSeekTo = objectToDetect;//Seek to the object to detect
     }
-    // Update is called once per frame
     void Update()
     {
         float distance = Vector3.Distance(transform.position, objectToDetect.transform.position);
-        if (distance <= radius && toDetect && toChase)
+        if (distance <= radius && toDetect && toChase)//If object is being seen do a certain behaviour
         {
             switch (behaviour)
             {
@@ -33,8 +28,7 @@ public class Detection : MonoBehaviour
                     if (GetComponent<Seek>() != null)
                     {
                         GetComponent<Seek>().toSeek = true;
-                        GetComponent<Seek>().objectToSeekTo = objectToDetect;
-                        
+                        GetComponent<Seek>().objectToSeekTo = objectToDetect;         //Start seeking            
                     }
                     else
                         print("There is no Seek Component Attatched...");
@@ -43,15 +37,14 @@ public class Detection : MonoBehaviour
                     break;
             }
         }
-        else if(distance > radius && toDetect && toChase)
+        else if(distance > radius && toDetect && toChase)//If out of range
         {
             switch (behaviour)
             {
                 case "Seek":
                     if (GetComponent<Seek>() != null)
                     {
-                        GetComponent<Seek>().toSeek = false;
-                        //print("Cannot See " + objectToDetect.ToString() + " - " + distance + " units away.");
+                        GetComponent<Seek>().toSeek = false;//Stop seeking
                     }
                     else
                         print("There is no Seek Component Attatched...");
@@ -70,7 +63,7 @@ public class Detection : MonoBehaviour
                 break;
             default:
                 break;
-        }
+        }//Switch the beahviour for use witin editor script
     }
     public void OnDrawGizmos()
     {

@@ -4,38 +4,31 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Seek : MonoBehaviour
 {
-    public bool toSeek = false;
-    public bool useAStarAlgorithm = false;
-    public GameObject objectToSeekTo;
-    private NavMeshAgent agent;
-    public List<GameObject> nodes = new List<GameObject>();
-    public GameObject treeOfNodes;
-    public bool isUsingNodes = false;
-    public bool clearNodesOnTreeAdd = false;
-    public int nodeAt = 0;
-    private bool isFinished = false;
-    public bool updateRouteEveryFrame = true;
+    public bool toSeek = false;//To seek
+    public bool useAStarAlgorithm = false;//Using a star
+    public GameObject objectToSeekTo;//Object to seek to
+    public List<GameObject> nodes = new List<GameObject>();//list of nodes
+    public GameObject treeOfNodes;//parent node object
+    public bool isUsingNodes = false;//We using nodes?
+    public bool clearNodesOnTreeAdd = false;//Clear the list on add of nodes
+    private int nodeAt = 0;//Node we are currently at
+    private bool isFinished = false;//finished seeking?
+    public bool updateRouteEveryFrame = false;//update the route every frame? (Very expensive but accurate)
     // Use this for initialization
     void Start()
     {
-        if (GetComponent<NavMeshAgent>() != null)
-            agent = GetComponent<NavMeshAgent>();
         if (objectToSeekTo == null)
         {
             Debug.Log("There is no object to seek to...");
-        }
+        }//if theres no object to goto
         if (useAStarAlgorithm && isUsingNodes)
         {
             if (GetComponent<NavMeshAgent>() != null)
-                agent.enabled = false;
-        }
+                GetComponent<NavMeshAgent>().enabled = false;
+        }//disable the navmesh if there is  one
+        GetComponent<Unit>().GotoPath(objectToSeekTo.transform.position);//goto the location setup (objecttoseekto)
+    }
 
-    }
-    void Awake()
-    {
-        if (isUsingNodes)
-            InsertTreeOfNodes();
-    }
     public void InsertTreeOfNodes()
     {
         if (treeOfNodes != null && clearNodesOnTreeAdd)
@@ -46,57 +39,42 @@ public class Seek : MonoBehaviour
         {
             nodes.Add(treeOfNodes.transform.GetChild(i).gameObject);
         }
+        //Add nodes to the list from the parent game object
     }
     public void ClearTreeOfNodes()
     {
         nodes.Clear();
-    }
-    // Update is called once per frame
+    }//clear the nodes list
+
     void Update()
     {
         if (toSeek && !useAStarAlgorithm)
         {
             if (GetComponent<NavMeshAgent>() != null)
-                agent.destination = objectToSeekTo.transform.position;
-        }
+                GetComponent<NavMeshAgent>().destination = objectToSeekTo.transform.position;
+        }//Not using a star then get the navmesh and goto the object to seek to
         if (toSeek && isUsingNodes && useAStarAlgorithm && !isFinished)
         {
             if (nodeAt >= nodes.Count)
-                isFinished = true;
+                isFinished = true;//Finished is true when at last node
             if (nodeAt == 0)
             {
-                PathRequestManager.ClearPath();
-                GetComponent<Unit>().target = nodes[0].transform;
-                PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[0].transform.position,
-                GetComponent<Unit>().OnPathFound);
+                GetComponent<Unit>().GotoPath(nodes[0].transform.position);
                 nodeAt++;
-            }
-            float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAt - 1].transform.position);
+            }//On the first node goto it
+            float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAt - 1].transform.position);//distance betwen self and node
             if (distance <= 2.0f || updateRouteEveryFrame)
             {
                 if (!updateRouteEveryFrame && distance <= 2.0f)
                 {
-                    PathRequestManager.ClearPath();
-                    GetComponent<Unit>().targetIndex = 0;
-                    GetComponent<Unit>().target = nodes[nodeAt].transform;
-                    PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAt].transform.position,
-                    GetComponent<Unit>().OnPathFound);
-                    nodeAt++;
-                }
+                    GetComponent<Unit>().GotoPath(nodes[nodeAt].transform.position);
+                    nodeAt++;//Goto node along a path then increase nodeAt
+                }//NOT Updating every frame
                 else if (updateRouteEveryFrame)
                 {
-                    PathRequestManager.ClearPath();
-                    PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAt - 1].transform.position,
-                    GetComponent<Unit>().OnPathFound);
+                    GetComponent<Unit>().GotoPath(nodes[nodeAt].transform.position);//Calculate path & position everyframe
                 }
             }
-        }
-        else if (!isUsingNodes && useAStarAlgorithm && !isFinished && toSeek)
-        {
-            PathRequestManager.ClearPath();
-            GetComponent<Unit>().target = objectToSeekTo.transform;
-            PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, objectToSeekTo.transform.position,
-            GetComponent<Unit>().OnPathFound);
         }
 
     }

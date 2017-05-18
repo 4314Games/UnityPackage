@@ -14,8 +14,6 @@ public class AIManager : MonoBehaviour
     [HideInInspector]
     public bool toPatrol = false;
     [HideInInspector]
-    public bool toFlee = false;
-    [HideInInspector]
     public bool toDetect = false;
     [HideInInspector]
     public bool seekAdded = false;
@@ -39,7 +37,6 @@ public class AIManager : MonoBehaviour
         {
             toSeek = false;
             toPatrol = false;
-            toFlee = false;
             toDetect = false;
             if (GetComponent<Wander>() != null)
                 GetComponent<Wander>().toWander = true;
@@ -48,7 +45,6 @@ public class AIManager : MonoBehaviour
         {
             toWander = false;
             toPatrol = false;
-            toFlee = false;
             toDetect = false;
             if (GetComponent<Seek>() != null)
                 GetComponent<Seek>().toSeek = true;
@@ -57,28 +53,17 @@ public class AIManager : MonoBehaviour
         {
             toWander = false;
             toSeek = false;
-            toFlee = false;
             toDetect = false;
             if (GetComponent<Patrol>() != null)
                 GetComponent<Patrol>().toPatrol = true;
-        }
-        if (toFlee)
-        {
-            toWander = false;
-            toSeek = false;
-            toPatrol = false;
-            toDetect = false;
-            if (GetComponent<Flee>() != null)
-                GetComponent<Flee>().toFlee = true;
         }
         if (toDetect)
         {
             toWander = false;
             toSeek = false;
             toPatrol = false;
-            toFlee = false;
-            if (GetComponent<Flee>() != null)
-                GetComponent<Flee>().toFlee = true;
+            if (GetComponent<Detection>() != null)
+                GetComponent<Detection>().toDetect = true;
         }
         if (GetComponent<Seek>() != null)
             GetComponent<Seek>().toSeek = toSeek;
@@ -86,16 +71,10 @@ public class AIManager : MonoBehaviour
             GetComponent<Patrol>().toPatrol = toPatrol;
         if (GetComponent<Wander>() != null)
             GetComponent<Wander>().toWander = toWander;
-        if (GetComponent<Flee>() != null)
-            GetComponent<Flee>().toFlee = toFlee;
         if (GetComponent<Detection>() != null)
             GetComponent<Detection>().toDetect = toDetect;
     }
-    public void Awake()
-    {
-        //CheckScripts();
-        //UpdateAIFunction();
-    }
+
     public bool CheckScripts()//Check if each script has every component needed to work.
     {
         if (GetComponent<Seek>() != null)
@@ -162,15 +141,6 @@ public class AIManager : MonoBehaviour
                 counter++;
             }
 
-        }
-        if (GetComponent<Flee>() != null)
-        {
-            typeOfErrorMessage = "Flee Component";
-            if (GetComponent<Flee>().objectToFleeFrom == null)
-            {
-                errorMessage = "There is no valid gameobject, please attach one.\n" + GetComponent<Flee>().ToString();
-                return false;
-            }
         }
         if (GetComponent<Detection>() != null)
         {

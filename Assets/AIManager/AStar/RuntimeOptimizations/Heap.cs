@@ -10,7 +10,6 @@ public class Heap<T> where T : iHeapItem<T> {
     public Heap(int maxHeapSize)
     {
         items = new T[maxHeapSize];
-
     }
 
     public void Add(T item)

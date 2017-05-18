@@ -5,167 +5,48 @@ using UnityEngine.AI;
 //Kyle Norton 2017
 public class Patrol : MonoBehaviour
 {
-    public bool toPatrol = false;
-    public List<GameObject> nodes;
-    public GameObject treeOfNodes;
-    public bool clearNodesOnTreeAdd = false;
-    private NavMeshAgent agent;
-    public bool isPatrolling = false;
-    public float distanceToNextPatrol = 2.0f;
-    private int nodeAt = 0;
-    private int nodeAtAStar = 0;
-    public bool gotoStart = false;
-    private bool reachedEnd = false;
-    public bool useAStar = false;
-    public bool traverseForwards = true;
-    private bool firstNode = true;
+    public bool toPatrol = false; //To patrol -Editor?
+    public List<GameObject> nodes;//Nodes list
+    public GameObject treeOfNodes;//Nodes parent gameobject
+    public bool clearNodesOnTreeAdd = false;//Clear the list on addition of nodes?
+    public bool isPatrolling = false;// Currently Patrolling?
+    public float distanceToNextPatrol = 2.0f;//Distance between node and unit 
+    private int nodeAt = 0;//Current node at -- NonAstar
+    private int nodeAtAStar = 0;//Current node at - A Star
+    public bool gotoStart = false;//gotostart when the end is reached?
+    private bool reachedEnd = false;//has the end been reached
+    public bool useAStar = false;//use a star?
+    public bool traverseForwards = true;//go through the list forwards?
+    private bool firstNode = true;//going to first node?
     // Use this for initialization
     void Start()
     {
-        if (agent != null)
-            agent = GetComponent<NavMeshAgent>();
         if (isPatrolling && nodes.Count == 0)
         {
             Debug.Log("There are no nodes to move to...");
-        }
+        }//If there are no nodes
         if (isPatrolling && nodes.Count == 1)
         {
-            nodes.Add(this.gameObject);
-        }
+            nodes.Add(gameObject);
+        }//If there is one node add self to list to patrol between its starting location and the node
         if (useAStar)
             if (GetComponent<NavMeshAgent>() != null)
-                GetComponent<NavMeshAgent>().enabled = false;
+                GetComponent<NavMeshAgent>().enabled = false;//Disable the navmesh if using a star
     }
-    void Awake()
-    {
-        InsertTreeOfNodes();
-    }
-    // Update is called once per frame
     void Update()
     {
-
-        if (toPatrol && !useAStar && agent != null && isPatrolling)
-        {
-            if (agent.remainingDistance < distanceToNextPatrol)
-            {
-                PatrolTo();
-            }
-        }
-        else if (toPatrol && useAStar && isPatrolling)
+        if (toPatrol && useAStar && isPatrolling)
         {
             if (firstNode)
             {
-                PathRequestManager.ClearPath();
-                GetComponent<Unit>().targetIndex = 0;
-                GetComponent<Unit>().target = nodes[0].transform;
-                PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[0].transform.position,
-                GetComponent<Unit>().OnPathFound);
+                GetComponent<Unit>().GotoPath(nodes[0].transform.position);
                 firstNode = false;
             }
-
             PatrolToAStar();
-        }
+        }//We are using a star
 
     }
-    public void PatrolTo()
-    {
-
-        if (nodeAt > nodes.Count - 1)
-        {
-            reachedEnd = true;
-            if (gotoStart)
-            {
-                nodeAt = 0;
-            }
-            else
-            {
-                nodeAt = nodes.Count - 1;
-            }
-            //or go back through;
-        }
-        if (nodeAt < 0)
-        {
-            reachedEnd = false;
-            nodeAt = 0;
-        }
-        if (!isPatrolling)
-        {
-            agent.destination = nodes[nodeAt].transform.position;
-            if (reachedEnd && !gotoStart)
-            {
-                nodeAt--;
-            }
-            else
-            {
-                nodeAt++;
-            }
-            isPatrolling = true;
-        }
-        else
-        {
-            agent.destination = nodes[nodeAt].transform.position;
-            if (reachedEnd && !gotoStart)
-            {
-                nodeAt--;
-            }
-            else
-            {
-                nodeAt++;
-            }
-            isPatrolling = false;
-
-        }
-
-    }
-
-    public void PatrolToAStar()
-    {
-        float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);
-        //print(distance);
-        if (traverseForwards && distance <= distanceToNextPatrol)
-        {
-            nodeAtAStar++;
-            if (nodeAtAStar >= nodes.Count)
-            {
-                traverseForwards = false;
-                nodeAtAStar = nodes.Count - 1;
-                distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);
-            }
-            PathRequestManager.ClearPath();
-            GetComponent<Unit>().targetIndex = 0;
-            GetComponent<Unit>().target = nodes[nodeAtAStar].transform;
-            PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position,
-            GetComponent<Unit>().OnPathFound);
-            print("Traversing to - ..." + nodeAtAStar);
-        }
-        else if (!traverseForwards && distance <= distanceToNextPatrol)
-        {
-            if (!gotoStart)
-            {
-                nodeAtAStar--;
-                if (nodeAtAStar <= 0)
-                {
-                    traverseForwards = true;
-                    nodeAtAStar = 0;
-                }
-                PathRequestManager.ClearPath();
-                GetComponent<Unit>().targetIndex = 0;
-                GetComponent<Unit>().target = nodes[nodeAtAStar].transform;
-                PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position,
-                GetComponent<Unit>().OnPathFound);
-            }
-            else
-            {
-                traverseForwards = true;
-                nodeAtAStar = 0;
-                PathRequestManager.ClearPath();
-                GetComponent<Unit>().targetIndex = 0;
-                GetComponent<Unit>().target = nodes[nodeAtAStar].transform;
-                PathRequestManager.RequestPath(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position,
-                GetComponent<Unit>().OnPathFound);
-            }
-        }
-    }
+   
     public void InsertTreeOfNodes()
     {
         if (treeOfNodes != null && clearNodesOnTreeAdd)
@@ -176,9 +57,48 @@ public class Patrol : MonoBehaviour
         {
             nodes.Add(treeOfNodes.transform.GetChild(i).gameObject);
         }
+        //Add nodes to the list from the parent game object
     }
     public void ClearTreeOfNodes()
     {
-        nodes.Clear();
+        nodes.Clear();//clear the list
     }
+    public void PatrolToAStar()
+    {
+        float distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);//Distance between self and node at
+        if (traverseForwards && distance <= distanceToNextPatrol)
+        {
+            nodeAtAStar++;
+            if (nodeAtAStar >= nodes.Count)
+            {
+                traverseForwards = false;
+                nodeAtAStar = nodes.Count - 1;
+                distance = Vector3.Distance(GetComponent<Unit>().transform.position, nodes[nodeAtAStar].transform.position);
+            }//Reached the last node start going back
+
+            GetComponent<Unit>().GotoPath(nodes[nodeAtAStar].transform.position);
+            print("Traversing to - ..." + nodeAtAStar);
+            //Follow a path at the nodes location
+        }
+        else if (!traverseForwards && distance <= distanceToNextPatrol)//going backwards
+        {
+            if (!gotoStart)
+            {
+                nodeAtAStar--;
+                if (nodeAtAStar <= 0)
+                {
+                    traverseForwards = true;
+                    nodeAtAStar = 0;
+                }//goto the start
+                GetComponent<Unit>().GotoPath(nodes[nodeAtAStar].transform.position);
+            }//not going to the start follow a path at nodes location
+            else
+            {
+                traverseForwards = true;
+                nodeAtAStar = 0;
+                GetComponent<Unit>().GotoPath(nodes[nodeAtAStar].transform.position);
+            }//go back to the start
+        }
+    }
+
 }

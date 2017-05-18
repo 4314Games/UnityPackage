@@ -2,27 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour {
-
-    public Transform target;
-    public float speed = 8;
-    Vector3[] path;
-    [HideInInspector]public int targetIndex;
-   // public bool isPathing = true;
-    private void Start()
-    {
-        //PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-    }
+public class Unit : MonoBehaviour
+{
+    public float speed = 8;//speed to move
+    Vector3[] path;//Path to follow
+    int targetIndex;//Index of the waypoint to goto 
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
     {
-        if (pathSuccessful /*&& isPathing*/)
+        if (pathSuccessful)
         {
             path = newPath;
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
-        }
+        }//When a path has succesfully been found stop ant routines running and start to follow that path
     }
-
+    public void GotoPath(Vector3 path)
+    {
+        PathRequestManager.RequestPath(transform.position, path, OnPathFound);
+    }
     IEnumerator FollowPath()
     {
         if (path.Length != 0)
@@ -42,7 +39,7 @@ public class Unit : MonoBehaviour {
                 transform.position = Vector3.MoveTowards(transform.position, currrentWaypoint, speed * Time.deltaTime);
                 yield return null;
             }
-        }
+        }//Go aloing the grid following a set of waypoints determined by the a star node calculation
     }
 
     public void OnDrawGizmos()
@@ -64,5 +61,5 @@ public class Unit : MonoBehaviour {
                 }
             }
         }
-    }
+    }//Just drawing a line to the node it is travelling to
 }

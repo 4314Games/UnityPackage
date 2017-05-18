@@ -20,15 +20,11 @@ public class AIManagerEditor : Editor
     string patrolButtonAddString = "Add Patrol Component";
     string patrolButtonRemoveString = "Remove Patrol Component";
 
-    string fleeButtonString = "Add Flee Component";
-    string fleeButtonAddString = "Add Flee Component";
-    string fleeButtonRemoveString = "Remove Flee Component";
-
     string detectionButtonString = "Add Detection Component";
     string detectionButtonAddString = "Add Detection Component";
     string detectionButtonRemoveString = "Remove Detection Component";
 
-    public string[] options = new string[] { "Seek", "Wander", "Patrol", "Flee", "Detection" };
+    public string[] options = new string[] { "Seek", "Wander", "Patrol","Detection" };
     public int index = 0;
 
     public void SetupButtonText(AIManager script)
@@ -48,11 +44,6 @@ public class AIManagerEditor : Editor
         else if (!script.patrolAdded)
             patrolButtonString = patrolButtonAddString;
 
-        if (script.fleeAdded)
-            fleeButtonString = fleeButtonRemoveString;
-        else if (!script.fleeAdded)
-            fleeButtonString = fleeButtonAddString;
-
         if (script.detectionAdded)
             detectionButtonString = detectionButtonRemoveString;
         else if (!script.detectionAdded)
@@ -61,13 +52,9 @@ public class AIManagerEditor : Editor
     public override void OnInspectorGUI()
     {
         GameObject script = ((MonoBehaviour)target).gameObject;
-        //Debug.Log("Object being targeted: " + script);
         SetupButtonText(script.GetComponent<AIManager>());
         DrawDefaultInspector();
-        //if (EditorPrefs.HasKey("index"))
-            //script.GetComponent<AIManager>().index = EditorPrefs.GetInt("index");
         script.GetComponent<AIManager>().index = EditorGUILayout.Popup("Behaviour", script.GetComponent<AIManager>().index, options);
-        //EditorPrefs.SetInt("index", script.GetComponent<AIManager>().index);
         switch (script.GetComponent<AIManager>().index)
         {
             case 0:
@@ -81,10 +68,6 @@ public class AIManagerEditor : Editor
             case 2:
                 if (script.GetComponent<Patrol>() != null)
                     script.GetComponent<Patrol>().toPatrol = true;
-                break;
-            case 3:
-                if (script.GetComponent<Flee>() != null)
-                    script.GetComponent<Flee>().toFlee = true;
                 break;
             case 4:
                 if (script.GetComponent<Detection>() != null)
@@ -134,19 +117,6 @@ public class AIManagerEditor : Editor
                 script.GetComponent<AIManager>().patrolAdded = true;
             }
         }
-        if (GUILayout.Button(fleeButtonString))
-        {
-            if (script.GetComponent<AIManager>().fleeAdded && script.GetComponent<Flee>() != null)
-            {
-                DestroyImmediate(script.GetComponent<Flee>());
-                script.GetComponent<AIManager>().fleeAdded = false;
-            }
-            else if (!script.GetComponent<AIManager>().fleeAdded)
-            {
-                script.gameObject.AddComponent<Flee>();
-                script.GetComponent<AIManager>().fleeAdded = true;
-            }
-        }
         if (GUILayout.Button(detectionButtonString))
         {
             if (script.GetComponent<AIManager>().detectionAdded && script.GetComponent<Detection>() != null)
@@ -160,7 +130,6 @@ public class AIManagerEditor : Editor
                 script.GetComponent<AIManager>().detectionAdded = true;
             }
         }
-       // script.UpdateAIFunction();
         if (EditorApplication.isPlaying && EditorPrefs.GetBool("Start"))
         {
             EditorPrefs.SetBool("Start", false);
