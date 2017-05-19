@@ -21,6 +21,7 @@ public class Unit : MonoBehaviour
         PathRequestManager.RequestPath(transform.position, path, OnPathFound);
         targetIndex = 0;
         path = new Vector3();
+        //clear the path after requesting one
     }
     IEnumerator FollowPath()
     {
