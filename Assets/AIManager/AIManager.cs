@@ -6,8 +6,6 @@ using UnityEngine;
 public class AIManager : MonoBehaviour
 {
     [HideInInspector]
-    public int index = 0;
-    [HideInInspector]
     public bool toWander = false;
     [HideInInspector]
     public bool toSeek = false;
@@ -25,10 +23,13 @@ public class AIManager : MonoBehaviour
     public bool fleeAdded = false;
     [HideInInspector]
     public bool detectionAdded = false;
+    //What behaviour has been added or not and what behaviours are currently running
     [HideInInspector]
-    public string errorMessage;
+    public string errorMessage;//actual error message
     [HideInInspector]
-    public string typeOfErrorMessage;
+    public string typeOfErrorMessage;//Type of error message e.g - type of script
+
+    public int index = 0;//behaviour index
 
     // Update is called once per frame
     public void UpdateAIFunction()
@@ -73,7 +74,7 @@ public class AIManager : MonoBehaviour
             GetComponent<Wander>().toWander = toWander;
         if (GetComponent<Detection>() != null)
             GetComponent<Detection>().toDetect = toDetect;
-    }
+    }//Will check what behaviours are enabled/ added an go into the appropriate script and enable them
 
     public bool CheckScripts()//Check if each script has every component needed to work.
     {
@@ -102,7 +103,7 @@ public class AIManager : MonoBehaviour
                 }
                 return false;
             }
-        }
+        }//Checks the Seek script to see if all necc. components are filled
         if (GetComponent<Wander>() != null)
         {
             typeOfErrorMessage = "Wander Component";
@@ -121,7 +122,7 @@ public class AIManager : MonoBehaviour
                 }
                 counter++;
             }
-        }
+        }//Checks the Wander script to see if all necc. components are filled
         if (GetComponent<Patrol>() != null)
         {
             typeOfErrorMessage = "Patrol Component";
@@ -141,7 +142,7 @@ public class AIManager : MonoBehaviour
                 counter++;
             }
 
-        }
+        }//Checks the Patrol script to see if all necc. components are filled
         if (GetComponent<Detection>() != null)
         {
             typeOfErrorMessage = "Detection Component";
@@ -155,7 +156,7 @@ public class AIManager : MonoBehaviour
                 errorMessage = "There is no Seek component Attatched, please attach one.\n" + GetComponent<Seek>().ToString();
                 return false;
             }
-        }
+        }//Checks the Detection script to see if all necc. components are filled
         return true;
     }
 }

@@ -11,10 +11,8 @@ public class Patrol : MonoBehaviour
     public bool clearNodesOnTreeAdd = false;//Clear the list on addition of nodes?
     public bool isPatrolling = false;// Currently Patrolling?
     public float distanceToNextPatrol = 2.0f;//Distance between node and unit 
-    private int nodeAt = 0;//Current node at -- NonAstar
     private int nodeAtAStar = 0;//Current node at - A Star
     public bool gotoStart = false;//gotostart when the end is reached?
-    private bool reachedEnd = false;//has the end been reached
     public bool useAStar = false;//use a star?
     public bool traverseForwards = true;//go through the list forwards?
     private bool firstNode = true;//going to first node?
